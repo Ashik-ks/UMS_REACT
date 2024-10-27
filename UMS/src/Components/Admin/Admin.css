@@ -1,0 +1,172 @@
+*{
+margin: 0;
+padding: 0;
+}
+.adduser {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #e9c5e9, #d685df);
+    color: #eaeaea;
+    height: 100vh;
+  }
+.adminpage {
+    display: flex;
+}
+.sidebar {
+    background-color: #333;
+    color: white;
+    width: 200px;
+    height: 100vh;
+    padding-top: 20px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  .settings {
+    background-color: #333;
+  }
+  
+  .sidebar li.active {
+    background-color: #16ffbd;
+  }
+  #fetchvalue2,
+#fetchvalue3 {
+  background-color: #333;
+  border: none;
+  color: white;
+}
+
+#fetchvalue1 {
+  background-color: #16ffbd;
+  border: none;
+  color: white;
+}
+.resetformdiv {
+    margin-top: 10%;
+    margin-left: 15%;
+  }
+  .resetpassword {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid rgb(40, 187, 40);
+    border-radius: 4px;
+  }
+  .editbtn1 {
+    width: 40%;
+    background-color: #d685df;
+    border: none;
+    padding: 2px;
+    color: white;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .logout-link {
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .logout-link1 {
+    color: rgb(230, 18, 18);
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #logoutdiv {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #dc3545;
+    background-color: #f8d7da;
+    border-radius: 5px;
+  }
+  .text-danger {
+    color: #dc3545;
+    font-weight: bold;
+  }
+  
+  .spanbody {
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .spanbody:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+  }
+  main {
+    flex: 1;
+    padding: 20px;
+  }
+  .adminul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .admintextbox {
+    padding: 10px;
+    width: 70%;
+  }
+  
+  
+  .adminul .nav-link {
+    color: white;
+  }
+  .row {
+    margin-bottom: 20px;
+  }
+  
+  
+  .offcanvas {
+    width: 300px;
+  }
+  
+  .offcanvas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  header {
+    background-color: #16ffbd;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 0 0 60px;
+  }
+  .profileimg {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .text-danger {
+    color: red;
+  }
+  
+  .footer {
+    background-color: #333;
+  }
+  .adduser-link{
+    font-size: 16px;
+    color: rgb(238, 235, 235);
+    text-decoration: none;
+    font-weight: 300;
+  }

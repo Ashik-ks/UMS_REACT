@@ -1,0 +1,60 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.profileimg {
+    width: 30px;
+  }
+  
+.editbtn1 {
+    width: 40%;
+    background-color: #d685df;
+    border: none;
+    padding: 2px;
+    color: white;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .logout-link {
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .logout-link1 {
+    color: rgb(230, 18, 18);
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  #logoutdiv {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #dc3545;
+    background-color: #f8d7da;
+    border-radius: 5px;
+  }
+  
+  .text-danger {
+    color: #dc3545;
+    font-weight: bold;
+  }
+  .spanbody {
+    padding: 3px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .spanbody:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+  }
+  .row {
+    margin-bottom: 20px;
+  }
+  

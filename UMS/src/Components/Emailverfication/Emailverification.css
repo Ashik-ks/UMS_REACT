@@ -1,0 +1,35 @@
+*{
+margin: 0;
+padding: 0;
+}
+.verification-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+  }
+  .form-container {
+    box-shadow: 0 4px 20px rgba(6, 6, 6, 0.2); /* Soft shadow for depth */
+    padding: 20px;
+    background-color: #ffffff; /* White background for the form */
+    border-radius: 8px; /* Rounded corners */
+  }
+  .verifybtn{
+    background-color: #d685df;
+    border: none;
+    padding: 3px 6px 5px 6px;
+    color: white;
+    border-radius: 3px;
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .form-title{
+    color: #d685df;
+  }
+  
+  p {
+    color: #555; /* Text color for instructions */
+    margin-bottom: 20px;
+  }
+  
