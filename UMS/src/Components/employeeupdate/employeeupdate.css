@@ -1,0 +1,48 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.adduser {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #e9c5e9, #d685df);
+    color: #eaeaea;
+    height: 100vh;
+  }
+  .form-container1 {
+    margin: auto;
+    margin-top: 6%;
+    background-image: url('./images/WhatsApp\ Image\ 2024-10-09\ at\ 12.32.24_0a5cc346.jpg');
+    color: black;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    transition: all 0.3s ease;
+  }
+  
+  .form-container1 h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s;
+  }
+  #userForm {
+    display: flex;
+    flex-direction: column;
+  }
+  .employeeupdatebtn{
+  width: 30%;
+  background-color: #d685df;
+  border: none;
+  padding: 3px px 5px 6px;
+  color: white;
+  border-radius: 3px;
+  font-size: 17px;
+  font-weight: 500;
+}
+.footer {
+    background-color: #333;
+  }
+  

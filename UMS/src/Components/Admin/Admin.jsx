@@ -39,6 +39,11 @@ export default function Admin() {
                             </Link>
                         </li>
                         <li>
+                            <Link to="/EmployeeUpdate" className="adduser-link ">
+                            EmployeeUpdate
+                            </Link>
+                        </li>
+                        <li>
                             <button id="fetchvalue3" onClick={() => handleFilter('Employee')}>
                                 Employee
                             </button>
