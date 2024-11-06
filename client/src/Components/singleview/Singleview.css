@@ -1,0 +1,27 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.singleemployeecontainer {
+    width: 50px;
+  }
+  
+  .singleemployeecontainerimg {
+    width: 100px;
+    border-radius: 100%;
+  }
+  
+  .singleusercontainerimg {
+    width: 200px;
+  }
+  .footer {
+    background-color: #333;
+  }
+  .adduser {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #e9c5e9, #d685df);
+    color: #eaeaea;
+    height: 100vh;
+  }

@@ -54,6 +54,13 @@ export default function Admin() {
         navigate('/login'); // Navigate to the login page
     };
 
+
+    const singleview = (_id) => {
+        console.log("singleview button clicked with ID:", _id);
+        navigate(`/singleview/${_id}`);
+    };
+    
+
     return (
         <div className="adduser">
             <div className="container-fluid adminpage">
@@ -132,11 +139,12 @@ export default function Admin() {
                         <Link to="/Employee" className="btn border-0 bg-transparent text-dark fs-5 fw-bold text-decoration-underline">Employee</Link>
                     </ul>
                     <div className="row fs-2 fw-bold text-decoration-underline mb-3 ms-4 text-light" id="heading1">Users List</div>
-                    {loading ? (
+                <div className="userlist" >
+                {loading ? (
                         <p>Loading...</p>
                     ) : users.length > 0 ? (
                         users.map(user => (
-                            <div className="row ms-4" key={user.id}>
+                            <div className="row ms-4" key={user._id} onClick={() => singleview(user._id)}>
                                 <div className="col">
                                     {user.image && (
                                         <img
@@ -157,6 +165,7 @@ export default function Admin() {
                     ) : (
                         <p>No users found.</p>
                     )}
+                </div>
                 </main>
 
             </div>

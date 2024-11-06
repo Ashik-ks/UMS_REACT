@@ -84,7 +84,7 @@ function AddUser() {
             const responseText = await response.text();
 
             if (response.ok) {
-                setMessage("User added successfully!");
+                alert("User added successfully!");
                 // Clear form after submission
                 setName('');
                 setEmail('');
