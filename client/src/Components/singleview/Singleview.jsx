@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useParams,useNavigate } from "react-router-dom";  // Import useParams to access the route params
+import { Navigate, useParams,useNavigate } from "react-router-dom"; 
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Singleview() {
   const { id } = useParams();  
