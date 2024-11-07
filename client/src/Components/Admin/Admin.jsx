@@ -7,10 +7,14 @@ export default function Admin() {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
     const id = queryParams.get('id');
+    console.log("id : ",id)
     const tokenData = queryParams.get('login');
+    console.log("tokendata : ",tokenData)
 
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [password, setPassword] = useState('');
+    const [newpassword, setNewPassword] = useState('');
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -43,26 +47,58 @@ export default function Admin() {
         console.log(`Filtering by: ${value}`);
     };
 
-    const handlePasswordReset = (event) => {
-        event.preventDefault();
-        console.log("Password reset submitted");
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem('authToken'); // Clear the authToken
-        console.log("Logged out");
-        navigate('/login'); // Navigate to the login page
-    };
-
-
-    const singleview = (_id) => {
-        console.log("singleview button clicked with ID:", _id);
-        navigate(`/singleview/${_id}`);
+    const handlePasswordReset = async (event) => {
+      event.preventDefault();
+      console.log("Reset password button clicked...", newpassword, password);
+    
+      const dataToSubmit = { password, newpassword }; // Prepare the data object
+    
+      try {
+        const token = localStorage.getItem(tokenData);
+        if (!token) {
+          console.error("Token is missing, please log in again.");
+          return;
+        }
+    
+        const response = await fetch(`http://localhost:3000/passwordreset/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(dataToSubmit),
+        });
+    
+        const result = await response.json();
+        console.log("Employee Data after password reset:", result);
+    
+        if (response.ok) {
+          navigate(`/`);  // Redirect to login page after reset
+        } else {
+          // Handle unsuccessful response
+          alert("Password reset failed. Please try again.");
+        }
+    
+      } catch (error) {
+        console.error("Error resetting password:", error);
+        alert("An error occurred while resetting the password.");
+      }
     };
     
 
+    const handleLogout = () => {
+        localStorage.removeItem(tokenData); 
+        console.log("Logged out");
+        navigate('/'); 
+    };
+
+    const singleview = (_id) => {
+        console.log("singleview button clicked with ID:", _id);
+        navigate(`/singleview/${_id}/${tokenData}`);
+    };
+
     return (
-        <div className="adduser">
+        <div className="adduser1">
             <div className="container-fluid adminpage">
                 <header>
                     <div className="logo fs-6 fw-bold p-4">UMS Admin</div>
@@ -109,7 +145,10 @@ export default function Admin() {
                                                 name="password"
                                                 className="form-control"
                                                 placeholder="Enter Current password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
                                                 required
+                                                
                                             />
                                         </div>
                                         <div className="mb-3 text-dark">
@@ -120,7 +159,10 @@ export default function Admin() {
                                                 name="newpassword"
                                                 className="form-control"
                                                 placeholder="Enter New password"
+                                                value={newpassword}
+                                                onChange={(e) => setNewPassword(e.target.value)}
                                                 required
+                                                
                                             />
                                         </div>
                                         <button type="submit" className="editbtn1 mt-2">Submit</button>
@@ -136,44 +178,141 @@ export default function Admin() {
                 <main>
                     <ul className="adminul">
                         <input type="text" placeholder="Search..." className="admintextbox" />
-                        <Link to="/Employee" className="btn border-0 bg-transparent text-dark fs-5 fw-bold text-decoration-underline">Employee</Link>
+                        <Link to="/Employee" className="btn border-0 bg-transparent text-light fs-5 fw-bold text-decoration-underline">Employee</Link>
                     </ul>
                     <div className="row fs-2 fw-bold text-decoration-underline mb-3 ms-4 text-light" id="heading1">Users List</div>
-                <div className="userlist" >
-                {loading ? (
-                        <p>Loading...</p>
-                    ) : users.length > 0 ? (
-                        users.map(user => (
-                            <div className="row ms-4" key={user._id} onClick={() => singleview(user._id)}>
-                                <div className="col">
-                                    {user.image && (
-                                        <img
-                                            src={`http://localhost:3000${user.image}`}
-                                            alt={user.name}
-                                            className="img-fluid"
-                                            style={{ maxWidth: '100px', maxHeight: '100px' }}
-                                        />
-                                    )}
+                    <div className="userlist">
+                        {loading ? (
+                            <p>Loading...</p>
+                        ) : users.length > 0 ? (
+                            users.map(user => (
+                                <div className="row ms-4" key={user._id} onClick={() => singleview(user._id)}>
+                                    <div className="col">
+                                        {user.image && (
+                                            <img
+                                                src={`http://localhost:3000${user.image}`}
+                                                alt={user.name}
+                                                className="img-fluid"
+                                                style={{ maxWidth: '100px', maxHeight: '100px' }}
+                                            />
+                                        )}
+                                    </div>
+                                    <div className="col">{user.name}</div>
+                                    <div className="col">{user.email}</div>
+                                    <div className="col">
+                                        <button className="editbtn1" >Edit</button>
+                                    </div>
                                 </div>
-                                <div className="col">{user.name}</div>
-                                <div className="col">{user.email}</div>
-                                <div className="col">
-                                    <button onClick={() => console.log(`Edit user ${user.id}`)}>Edit</button>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No users found.</p>
-                    )}
-                </div>
+                            ))
+                        ) : (
+                            <p>No users found.</p>
+                        )}
+                    </div>
                 </main>
-
             </div>
-            <footer className="container-fluid mt-5 footer">
-                <div className="row">
-                    <div className="col text-center">Copyright © [Year] [Your Company Name]. All rights reserved.</div>
-                </div>
-            </footer>
+            <div className="container-fluid mt-5 footer1">
+  <div className="row">
+    <div className="col-2" />
+    <div className="col-2 d-flex flex-column   mt-3">
+      <div className="row text-decoration-underline ps-2">Quick Links</div>
+      <div className="row">
+        <a href="/" className="text-white text-decoration-none">
+          Home
+        </a>
+      </div>
+      <div className="row">
+        <a href="/features" className="text-white text-decoration-none">
+          Features
+        </a>
+      </div>
+      <div className="row">
+        <a href="/pricing" className="text-white text-decoration-none">
+          Pricing
+        </a>
+      </div>
+      <div className="row">
+        <a href="/support" className="text-white text-decoration-none">
+          Support
+        </a>
+      </div>
+    </div>
+    <div className="col-2 d-flex flex-column   mt-3">
+      <div className="row text-decoration-underline ps-2">Resources</div>
+      <div className="row">
+        <a href="/docs" className="text-white text-decoration-none">
+          Documentation
+        </a>
+      </div>
+      <div className="row">
+        <a href="/api" className="text-white text-decoration-none">
+          API Reference
+        </a>
+      </div>
+      <div className="row">
+        <a href="/faqs" className="text-white text-decoration-none">
+          FAQs
+        </a>
+      </div>
+      <div className="row">
+        <a href="/guides" className="text-white text-decoration-none">
+          User Guides
+        </a>
+      </div>
+    </div>
+    <div className="col-2 d-flex flex-column  mt-3">
+      <div className="row text-decoration-underline ps-2">Legal</div>
+      <div className="row">
+        <a href="/privacy" className="text-white text-decoration-none">
+          Privacy Policy
+        </a>
+      </div>
+      <div className="row">
+        <a href="/terms" className="text-white text-decoration-none">
+          Terms of Service
+        </a>
+      </div>
+      <div className="row">
+        <a href="/blog" className="text-white text-decoration-none">
+          Blog
+        </a>
+      </div>
+    </div>
+    <div className="col-2 d-flex flex-column   mt-3">
+      <div className="row text-decoration-underline ps-2">Connect with Us</div>
+      <div className="row">
+        <a href="/contact" className="text-white text-decoration-none">
+          Contact Us
+        </a>
+      </div>
+      <div className="row">
+        <a href="" className="text-white text-decoration-none">
+          1-800-123-4567
+        </a>
+      </div>
+      <div className="row">
+        <a
+          href="mailto:support@yourcompany.com"
+          className="text-white text-decoration-none"
+        >
+          support@yourcompany.com
+        </a>
+      </div>
+    </div>
+    <div className="col-2" />
+  </div>
+  <div className="row">
+    <div className="col-2" />
+    <div className="col border border-secondary border-top" />
+    <div className="col-2" />
+  </div>
+  <div className="row mt-3">
+    <div className="col-2" />
+    <div className="col">
+      Copyright © [Year] [Your Company Name]. All rights reserved.
+    </div>
+    <div className="col-2" />
+  </div>
+</div>
         </div>
     );
 }

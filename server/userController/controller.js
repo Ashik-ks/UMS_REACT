@@ -115,6 +115,7 @@ exports.GetSingleuser = async function (req, res) {
             console.log("id : ", id);
     
             let single_user = await users.find({ _id: id });
+            console.log("single_user : ",single_user)
     
             let response = success_function({
                 success: true,

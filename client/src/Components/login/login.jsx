@@ -31,6 +31,7 @@ export default function Login() {
             }
 
             const parsedResponse = await response.json();
+            console.log("paresed response : ",parsedResponse)
             const { token, tokenId, loginCount, userTypes } = parsedResponse.data;
 
             // Store the token in localStorage
@@ -39,13 +40,13 @@ export default function Login() {
 
             // Navigate based on the user type and login count
             if (loginCount === 0) {
-                navigate(`/passwordreset`);
+                navigate(`/resetpassword?id=${tokenId}`);
             } else if (userTypes === 'Admin') {
                 alert("Admin login successful");
                 navigate(`/Admin?id=${tokenId}&login=${tokenId}`); // Send key instead of token
             } else if (userTypes === 'Employee') {
                 alert("Employee login successful");
-                navigate(`/Employee?id=${tokenId}&login=${tokenId}`); // Send key instead of token
+                navigate(`/Employee?id=${tokenId}`); // Send key instead of token
             } else {
                 alert("Unknown user type. Please contact support.");
             }

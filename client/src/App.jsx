@@ -11,6 +11,8 @@ import Login from './Components/login/login';
 import "./Components/login/login.css";
 import Singleview from './Components/singleview/Singleview';
 import "./Components/singleview/Singleview.css"
+import Resetpassword from './Components/resetpassword/resetpassword';
+import "./Components/resetpassword/resetpassword.css"
 
 function App() {
   return (
@@ -21,8 +23,9 @@ function App() {
         <Route path="/Adduser" element={<Adduser />} />
         <Route path="/Admin" element={<Admin />} />
         <Route path="/email-verification" element={<Emailverification />} /> 
-        <Route path="/singleview/:id" element={<Singleview />} />
-      </Routes>
+        <Route path="/singleview/:id/:login" element={<Singleview />} />
+        <Route path="/resetpassword" element={<Resetpassword />} />
+        </Routes>
     </Router>
     
   );
