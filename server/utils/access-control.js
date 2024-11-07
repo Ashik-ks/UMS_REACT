@@ -1,7 +1,7 @@
 const success_function = require("../utils/responsehandler").success_function
 const error_function = require("../utils/responsehandler").error_function
+const { users } = require('../db/model/model');
 const jwt  = require('jsonwebtoken');
-const login = require('../db/model/model');
 const control_data = require('../utils/control-data.json');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -53,7 +53,7 @@ exports.accessControl = async function (access_types,req,res,next) {
                         // req.params = user_id;
                         // console.log("req.params : ",req.params)
 
-                        let user = await login.findOne({_id : user_id});
+                        let user = await users.findOne({_id : user_id});
                         console.log("user : ",user);
 
                         let user_type = user.userType;

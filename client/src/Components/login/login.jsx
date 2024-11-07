@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate,Link } from 'react-router-dom'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Login() {
@@ -96,12 +96,8 @@ export default function Login() {
                                     required
                                 />
                                 <div className="mb-3">
-                                    <button
-                                        type="button"
-                                        className="forgetpass text-start"
-                                        onClick={() => alert("Forgot Password functionality not implemented.")}
-                                    >
-                                        Forgot Your Password?
+                                    <button type="button"className="forgetpass text-start">
+                                        <Link to="/email-verification">Forgot Your Password?</Link>
                                     </button>
                                 </div>
                                 <input

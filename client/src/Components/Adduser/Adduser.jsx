@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 function AddUser() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [userType, setUserType] = useState('');
     const [joiningDate, setJoiningDate] = useState('');
     const [image, setImage] = useState(null);
     const [message, setMessage] = useState('');
@@ -65,7 +64,6 @@ function AddUser() {
         const add_data = {
             name,
             email,
-            userType,
             joiningDate,
             image: dataUrl,
         };
@@ -88,7 +86,6 @@ function AddUser() {
                 // Clear form after submission
                 setName('');
                 setEmail('');
-                setUserType('');
                 setJoiningDate('');
                 setImage(null);
                 document.getElementById('image').value = ''; // Reset the file input
@@ -168,7 +165,7 @@ function AddUser() {
                             name="image"
                             className="form-control"
                             onChange={handleFileChange}
-                            required
+                            
                         />
                     </div>
                     <div className="mb-3">
@@ -183,21 +180,7 @@ function AddUser() {
                             required
                         />
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="userType">User Type:</label>
-                        <select
-                            id="userType"
-                            name="userType"
-                            className="form-control"
-                            value={userType}
-                            onChange={(e) => setUserType(e.target.value)}
-                            required
-                        >
-                            <option value="">Select user type</option>
-                            <option value="Employee">Employee</option>
-                            {/* More options can be added here */}
-                        </select>
-                    </div>
+                 
                     <button type="submit" className="adduserbtn mt-2" disabled={loading}>
                         {loading ? 'Submitting...' : 'Submit'}
                     </button>

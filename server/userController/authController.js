@@ -1,6 +1,6 @@
 const success_function = require('../utils/responsehandler').success_function;
 const error_function = require('../utils/responsehandler').error_function;
-const users = require('../db/model/model');
+const { users } = require('../db/model/model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
@@ -12,6 +12,7 @@ const resetPassword =require("../utils/email-templates/resetPassword").resetPass
 exports.login = async function (req, res) {
     try {
         const { email, password } = req.body;
+        console.log("body",req.body)
 
         // Validate input
         if (!email) {

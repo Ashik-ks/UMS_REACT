@@ -13,6 +13,8 @@ import Singleview from './Components/singleview/Singleview';
 import "./Components/singleview/Singleview.css"
 import Resetpassword from './Components/resetpassword/resetpassword';
 import "./Components/resetpassword/resetpassword.css"
+import Updateemployee from './Components/updateemployee/Updateemployee';
+import "./Components/updateemployee/Updateemployee.css"
 
 function App() {
   return (
@@ -25,9 +27,9 @@ function App() {
         <Route path="/email-verification" element={<Emailverification />} /> 
         <Route path="/singleview/:id/:login" element={<Singleview />} />
         <Route path="/resetpassword" element={<Resetpassword />} />
+        <Route path="/updateemployee/:id" element={<Updateemployee />} />
         </Routes>
     </Router>
-    
   );
 }
 

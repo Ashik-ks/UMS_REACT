@@ -54,6 +54,11 @@ export default function Employee() {
         setIsOffcanvasOpen(!isOffcanvasOpen);
     };
 
+    const updatepage = () => {
+        console.log("update btn clicked")
+        navigate(`/updateemployee/${id}`)
+    }
+
     // Fetch employee data
     useEffect(() => {
         const fetchData = async () => {
@@ -95,7 +100,7 @@ export default function Employee() {
                                 type="button"
                                 onClick={toggleOffcanvas}  // Toggle offcanvas visibility
                             >
-                               Profile
+                                Profile
                             </button>
 
                             {/* Offcanvas */}
@@ -116,6 +121,9 @@ export default function Employee() {
                                         aria-label="Close"
                                     />
                                 </div>
+
+                                <div><button onClick={updatepage}>Edit profile</button></div>
+
                                 <div className="offcanvas-body d-flex flex-column">
                                     <form className="resetformoffcanvas" onSubmit={handleProfileSubmit}>
                                         <div className="mb-3 text-dark">
@@ -151,7 +159,7 @@ export default function Employee() {
                                     <button onClick={handleLogout} className="logout-link1 ms-4 mt-1 mb-3 fs-6 fw-bold">
                                         Logout
                                     </button>
-                                   
+
                                 </div>
                             </div>
                         </li>

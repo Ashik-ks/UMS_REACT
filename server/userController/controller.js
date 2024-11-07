@@ -1,8 +1,6 @@
-let users = require('../db/model/model');
-let userTypes = require('../db/model/userTypes')
+const { users } = require('../db/model/model');
 const { success_function, error_function } = require('../utils/responsehandler');
 const bcrypt = require('bcrypt')
-const userType = require('../db/model/userTypes')
 const fileUpload = require('../utils/file-upload').fileUpload;
 const fileDelete = require('../utils/file-delete').fileDelete;
 const path = require('path');
@@ -11,7 +9,7 @@ const sendEmail = require("../utils/send-email").sendEmail;
   
 exports.Adduser = async function (req, res) {
     try {
-        const { name, email, joiningdate, userType, password, image } = req.body;
+        const { name, email, joiningdate, password, image } = req.body;
         console.log("body: ", req.body);
 
         // Generate a random password if one is not provided
@@ -38,12 +36,14 @@ exports.Adduser = async function (req, res) {
             console.log("Uploaded image path: ", imagePath);
         }
 
+        
+
         const newUser = {
             email,
             name,
             joiningdate,
             image: imagePath,
-            userType,
+            userType:"Employee",
             password: hashedPassword
         };
 
@@ -174,6 +174,7 @@ exports.edituser = async function (req, res) {
         }
 
         const existingUser = await users.findOne({ _id });
+        console.log("existing user : ",existingUser)
         if (!existingUser) {
             let response = error_function({
                 success: false,
