@@ -114,7 +114,7 @@ exports.passwordreset = async function (req, res) {
 
         console.log("User: ", user);
 
-        // Check if the provided password matches the current password
+        // Check if the provided current password matches the stored password
         const passwordMatch = await bcrypt.compare(req.body.password, user.password);
         console.log("Password Match: ", passwordMatch);
 
@@ -123,6 +123,15 @@ exports.passwordreset = async function (req, res) {
                 success: false,
                 statuscode: 400,
                 message: "Invalid current password",
+            });
+        }
+
+        // Check if the new password is the same as the current password
+        if (req.body.password === req.body.newpassword) {
+            return res.status(400).send({
+                success: false,
+                statuscode: 400,
+                message: "New password must be different from the current password",
             });
         }
 
@@ -136,10 +145,9 @@ exports.passwordreset = async function (req, res) {
 
         // Check if the update was successful
         if (updateUser.modifiedCount > 0) {
-
             // Increment login count
             user.loginCount = (user.loginCount || 0) + 1;
-            await user.save();
+            await user.save(); // Save the updated login count
 
             return res.status(200).send({
                 success: true,
@@ -164,6 +172,7 @@ exports.passwordreset = async function (req, res) {
         });
     }
 };
+
 
 exports.forgotPasswordController = async function (req, res) {
     try {

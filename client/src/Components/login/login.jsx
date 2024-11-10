@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate,Link } from 'react-router-dom'; 
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Login() {
@@ -16,26 +17,25 @@ export default function Login() {
         const data = { email, password };
 
         try {
-            const response = await fetch('http://localhost:3000/login', {
-                method: 'POST',
+            // Replacing fetch with axios
+            const response = await axios.post('http://localhost:3000/login', data, {
                 headers: {
                     'Content-Type': "application/json",
                 },
-                body: JSON.stringify(data),
             });
 
-            if (!response.ok) {
-                const errorResponse = await response.json();
-                alert(errorResponse.message);
+            if (response.status !== 200) {
+                // If the response status is not 200 (OK), handle error
+                alert(response.data.message || "An error occurred");
                 return;
             }
 
-            const parsedResponse = await response.json();
-            console.log("paresed response : ",parsedResponse)
-            const { token, tokenId, loginCount, userTypes } = parsedResponse.data;
+            // Extract the data from the response
+            const { token, tokenId, loginCount, userTypes } = response.data.data;
+            console.log("Parsed response:", response.data);
 
             // Store the token in localStorage
-            localStorage.setItem(tokenId, token); // Use a constant key
+            localStorage.setItem(tokenId, token); // Store the token with the tokenId as the key
             console.log("Token stored successfully.");
 
             // Navigate based on the user type and login count
@@ -43,10 +43,10 @@ export default function Login() {
                 navigate(`/resetpassword?id=${tokenId}`);
             } else if (userTypes === 'Admin') {
                 alert("Admin login successful");
-                navigate(`/Admin?id=${tokenId}&login=${tokenId}`); // Send key instead of token
+                navigate(`/Admin?id=${tokenId}&login=${tokenId}`);
             } else if (userTypes === 'Employee') {
                 alert("Employee login successful");
-                navigate(`/Employee?id=${tokenId}`); // Send key instead of token
+                navigate(`/Employee?id=${tokenId}`);
             } else {
                 alert("Unknown user type. Please contact support.");
             }
@@ -59,7 +59,7 @@ export default function Login() {
     };
 
     return (
-        <div className="index mt-5">
+        <div className="index">
             <div className="indexbody">
                 <div className="animated slideInLeft" id="square">
                     <div className="animated bounceInUp" id="leftSquare">
@@ -82,7 +82,7 @@ export default function Login() {
                                     name="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="form-control border-0 shadow-sm bg-body rounded mb-3"
+                                    className="form-control border-0 shadow-sm bg-body rounded mb-3 emaillogin"
                                     placeholder="Enter Your Email"
                                     required
                                 />
@@ -91,13 +91,13 @@ export default function Login() {
                                     name="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="form-control border-0 shadow-sm bg-body rounded mb-3"
+                                    className="form-control border-0 shadow-sm bg-body rounded mb-3 passwordlogin"
                                     placeholder="Enter Your Password"
                                     required
                                 />
                                 <div className="mb-3">
-                                    <button type="button"className="forgetpass text-start">
-                                        <Link to="/email-verification">Forgot Your Password?</Link>
+                                    <button type="button" className="forgetpass text-start">
+                                        <Link to="/email-verification" className="forgetpasslink">Forgot Your Password?</Link>
                                     </button>
                                 </div>
                                 <input

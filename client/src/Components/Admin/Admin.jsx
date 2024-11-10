@@ -1,38 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 export default function Admin() {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const id = queryParams.get('id');
-  console.log("id : ", id)
   const tokenData = queryParams.get('login');
-  console.log("tokendata : ", tokenData)
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [password, setPassword] = useState('');
   const [newpassword, setNewPassword] = useState('');
+  const [isEditing, setIsEditing] = useState(false); // State to track form visibility
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); // State for the logout confirmation modal
+  const [isPageBlurred, setIsPageBlurred] = useState(false); // State to control the blur effect on the page
 
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true); // Start loading
       try {
         const token = localStorage.getItem(tokenData);
-        console.log("Token:", token);
         const response = await fetch('http://localhost:3000/users', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
           },
         });
         const data = await response.json();
-        console.log("API Response:", data);
-        setUsers(data.data || []); // Correctly access the user data
-        console.log("Updated Users:", data.data); // Log the users
+        setUsers(data.data || []);
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
@@ -43,15 +42,10 @@ export default function Admin() {
     fetchUsers();
   }, [tokenData]);
 
-  const handleFilter = (value) => {
-    console.log(`Filtering by: ${value}`);
-  };
-
+  // Handle password reset form submission
   const handlePasswordReset = async (event) => {
     event.preventDefault();
-    console.log("Reset password button clicked...", newpassword, password);
-
-    const dataToSubmit = { password, newpassword }; // Prepare the data object
+    const dataToSubmit = { password, newpassword };
 
     try {
       const token = localStorage.getItem(tokenData);
@@ -69,38 +63,51 @@ export default function Admin() {
         body: JSON.stringify(dataToSubmit),
       });
 
-      const result = await response.json();
-      console.log("Employee Data after password reset:", result);
-
       if (response.ok) {
-        navigate(`/`);  // Redirect to login page after reset
+        navigate(`/`); // Redirect to login page after reset
       } else {
-        // Handle unsuccessful response
         alert("Password reset failed. Please try again.");
       }
-
     } catch (error) {
       console.error("Error resetting password:", error);
       alert("An error occurred while resetting the password.");
     }
   };
 
+  useEffect(() => {
+    // Disable scrolling when the modal is open
+    if (showLogoutConfirmation) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [showLogoutConfirmation]);
 
   const handleLogout = () => {
-    localStorage.removeItem(tokenData);
-    console.log("Logged out");
-    navigate('/');
+    setShowLogoutConfirmation(true); // Show confirmation modal
+    setIsPageBlurred(true); // Apply blur effect to the page content
+  };
+  
+  const cancelLogout = () => {
+    setShowLogoutConfirmation(false); // Hide confirmation modal
+    setIsPageBlurred(false); // Remove blur effect from the page
+  };
+  
+
+  // Confirm logout action (clears token and redirects)
+  const confirmLogout = () => {
+    localStorage.removeItem(tokenData); // Clear the token from localStorage
+    navigate('/'); // Navigate to login page
   };
 
+  // Single user view navigation
   const singleview = (_id) => {
-    console.log("singleview button clicked with ID:", _id);
     navigate(`/singleview/${_id}/${tokenData}`);
   };
 
+  // Delete user functionality
   const deleteUser = async (userId) => {
-
-    const token = localStorage.getItem( tokenData);
-        console.log("Token:", token);
+    const token = localStorage.getItem(tokenData);
 
     try {
       const response = await fetch(`http://localhost:3000/users/${userId}`, {
@@ -113,30 +120,30 @@ export default function Admin() {
 
       if (response.ok) {
         alert("User deleted successfully");
-        navigate(0);
-      } 
+        navigate(0); // Refresh the page after deletion
+      }
     } catch (error) {
       console.error("Error deleting user:", error);
-    } 
+    }
+  };
+
+  // Toggle visibility of the profile edit form
+  const toggleEditForm = () => {
+    setIsEditing(!isEditing);
   };
 
   return (
-    <div className="adduser1">
+    <div className={`adduser1 ${isPageBlurred ? 'blurred' : ''}`}>
       <div className="container-fluid adminpage">
-        <header>
-          <div className="logo fs-6 fw-bold p-4">UMS Admin</div>
-        </header>
         <nav className="sidebar">
           <ul>
-            <li>Dashboard</li>
+            <div className="logo fs-4 fw-bold mt-4 mb-4 text-decoration-underline">UMS Admin</div>
+            <li className="pt-2">Dashboard</li>
             <li className="active">
-              <button id="fetchvalue1" onClick={() => handleFilter('')}>Users</button>
+              <button id="fetchvalue1" onClick={() => console.log("Filter button clicked")}>Users</button>
             </li>
             <li>
-              <Link to={`/Adduser?id=${id}&login=${tokenData}`} className="adduser-link">Add Users</Link>
-            </li>
-            <li>
-              <button id="fetchvalue3" onClick={() => handleFilter('Employee')}>Employee</button>
+              <Link to={`/Adduser?id=${id}&login=${tokenData}`} className="settings text-light text-decoration-none">Add Users</Link>
             </li>
             <li>
               <button
@@ -159,74 +166,96 @@ export default function Admin() {
                   <button type="button" className="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" />
                 </div>
                 <div className="offcanvas-body">
-                  <form onSubmit={handlePasswordReset}>
-                    <div className="mb-3 text-dark">
-                      <label htmlFor="resetpassword">Current Password:</label>
-                      <input
-                        type="password"
-                        id="resetpassword"
-                        name="password"
-                        className="form-control"
+                  <button className="btn1" onClick={toggleEditForm}>
+                    {isEditing ? (
+                      "Cancel"
+                    ) : (
+                      <>
+                        Reset Your Password <i className="fa fa-long-arrow-right" aria-hidden="true"></i>
+                      </>
+                    )}
+                  </button>
+
+                  {isEditing && (
+                    <form onSubmit={handlePasswordReset} className="resetform">
+                      <div className="mb-3 coolinput">
+                        <label htmlFor="resetpassword" className="coolinputlabeltext" >Current Password:</label>
+                        <input type="password" id="" name="password"
+                        className="coolinputinput"
                         placeholder="Enter Current password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-
-                      />
-                    </div>
-                    <div className="mb-3 text-dark">
-                      <label htmlFor="newpassword">New Password:</label>
-                      <input
-                        type="password"
-                        id="newpassword"
-                        name="newpassword"
-                        className="form-control"
-                        placeholder="Enter New password"
-                        value={newpassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-
-                      />
-                    </div>
-                    <button type="submit" className="editbtn1 mt-2">Submit</button>
-                  </form>
+                        />
+                      </div>
+                      <div className="mb-3 coolinput">
+                        <label htmlFor="newpassword" className="coolinputlabeltext">New Password:</label>
+                        <input
+                          type="password"
+                          id="newpassword"
+                          name="newpassword"
+                          className="coolinputinput"
+                          placeholder="Enter New password"
+                          value={newpassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <button type="submit" className="Btn mt-2">Submit</button>
+                    </form>
+                  )}
                 </div>
               </div>
             </li>
+            {/* Logout Button */}
             <li>
-              <button onClick={handleLogout} className="logout-link border-0 text-light">Logout</button>
+              <button onClick={handleLogout} className="settings border-0 text-light">Logout</button>
             </li>
           </ul>
         </nav>
+
+        {/* Logout Confirmation Modal */}
+        {showLogoutConfirmation && (
+          <div className="logout-modal">
+            <div className="logout-modal-content">
+              <h5>Are you sure you want to log out?</h5>
+              <div className="modal-actions">
+                <button className="btn" onClick={confirmLogout}>Yes</button>
+                <button className="btn" onClick={cancelLogout}>No</button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <main>
           <ul className="adminul">
             <input type="text" placeholder="Search..." className="admintextbox" />
-            <Link to="/Employee" className="btn border-0 bg-transparent text-light fs-5 fw-bold text-decoration-underline">Employee</Link>
           </ul>
-          <div className="row fs-2 fw-bold text-decoration-underline mb-3 ms-4 text-light" id="heading1">Users List</div>
-          <div className="userlist">
+          <div className="row fs-2 fw-bold text-decoration-underline mb-3 ms-4 text-dark" id="heading1">
+            Users List
+          </div>
+          <div className="userlist text-dark">
             {loading ? (
               <p>Loading...</p>
             ) : users.length > 0 ? (
               users.map(user => (
-                <div className="row ms-4" key={user._id} >
-                  <div className="col">
+                <div className="user-card shadow-sm p-3 mb-4 bg-light rounded" key={user._id}>
+                  <div className="user-card-content">
                     {user.image && (
-                      <img
-                        src={`http://localhost:3000${user.image}`}
-                        alt={user.name}
-                        className="img-fluid"
-                        style={{ maxWidth: '100px', maxHeight: '100px' }}
-                      />
+                      <img src={`http://localhost:3000/uploads/Users/${user.image}`} alt={user.name} />
                     )}
-                  </div>
-                  <div className="col">{user.name}</div>
-                  <div className="col">{user.email}</div>
-                  <div className="col">
-                    <button className="btn1" onClick={() => singleview(user._id)} >View</button>
-                  </div>
-                  <div className="col">
-                    <button className="btn1" onClick={() => deleteUser(user._id)} >delete</button>
+                    <div className="user-details">
+                      <div className="user-name">{user.name}</div>
+                      <div className="user-email">{user.email}</div>
+                    </div>
+                    <div className="user-actions">
+                      <button className="btn" onClick={() => singleview(user._id)}>
+                        View
+                      </button>
+                      <button className="btn" onClick={() => deleteUser(user._id)}>
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))
@@ -236,89 +265,89 @@ export default function Admin() {
           </div>
         </main>
       </div>
-      <div className="container-fluid mt-5 footer1">
+      <div className="container-fluid pt-4 pb-2 footer1">
         <div className="row">
           <div className="col-2" />
           <div className="col-2 d-flex flex-column   mt-3">
-            <div className="row text-decoration-underline ps-2">Quick Links</div>
+            <div className="row text-decoration-underline ps-2 text-dark">Quick Links</div>
             <div className="row">
-              <a href="/" className="text-white text-decoration-none">
+              <a href="/" className="text-dark text-decoration-none">
                 Home
               </a>
             </div>
             <div className="row">
-              <a href="/features" className="text-white text-decoration-none">
+              <a href="/features" className="text-dark text-decoration-none">
                 Features
               </a>
             </div>
             <div className="row">
-              <a href="/pricing" className="text-white text-decoration-none">
+              <a href="/pricing" className="text-dark text-decoration-none">
                 Pricing
               </a>
             </div>
             <div className="row">
-              <a href="/support" className="text-white text-decoration-none">
+              <a href="/support" className="text-dark text-decoration-none">
                 Support
               </a>
             </div>
           </div>
           <div className="col-2 d-flex flex-column   mt-3">
-            <div className="row text-decoration-underline ps-2">Resources</div>
+            <div className="row text-decoration-underline ps-2 text-dark">Resources</div>
             <div className="row">
-              <a href="/docs" className="text-white text-decoration-none">
+              <a href="/docs" className="text-dark text-decoration-none">
                 Documentation
               </a>
             </div>
             <div className="row">
-              <a href="/api" className="text-white text-decoration-none">
+              <a href="/api" className="text-dark text-decoration-none">
                 API Reference
               </a>
             </div>
             <div className="row">
-              <a href="/faqs" className="text-white text-decoration-none">
+              <a href="/faqs" className="text-dark text-decoration-none">
                 FAQs
               </a>
             </div>
             <div className="row">
-              <a href="/guides" className="text-white text-decoration-none">
+              <a href="/guides" className="text-dark text-decoration-none">
                 User Guides
               </a>
             </div>
           </div>
           <div className="col-2 d-flex flex-column  mt-3">
-            <div className="row text-decoration-underline ps-2">Legal</div>
+            <div className="row text-decoration-underline ps-2 text-dark">Legal</div>
             <div className="row">
-              <a href="/privacy" className="text-white text-decoration-none">
+              <a href="/privacy" className="text-dark text-decoration-none">
                 Privacy Policy
               </a>
             </div>
             <div className="row">
-              <a href="/terms" className="text-white text-decoration-none">
+              <a href="/terms" className="text-dark text-decoration-none">
                 Terms of Service
               </a>
             </div>
             <div className="row">
-              <a href="/blog" className="text-white text-decoration-none">
+              <a href="/blog" className="text-dark text-decoration-none">
                 Blog
               </a>
             </div>
           </div>
           <div className="col-2 d-flex flex-column   mt-3">
-            <div className="row text-decoration-underline ps-2">Connect with Us</div>
+            <div className="row text-decoration-underline ps-2 text-dark">Connect with Us</div>
             <div className="row">
-              <a href="/contact" className="text-white text-decoration-none">
+              <a href="/contact" className="text-dark text-decoration-none">
                 Contact Us
               </a>
             </div>
             <div className="row">
-              <a href="" className="text-white text-decoration-none">
+              <a href="" className="text-dark text-decoration-none">
                 1-800-123-4567
               </a>
             </div>
             <div className="row">
               <a
                 href="mailto:support@yourcompany.com"
-                className="text-white text-decoration-none"
+                className="text-dark text-decoration-none"
               >
                 support@yourcompany.com
               </a>
@@ -331,9 +360,9 @@ export default function Admin() {
           <div className="col border border-secondary border-top" />
           <div className="col-2" />
         </div>
-        <div className="row mt-3">
+        <div className="row ">
           <div className="col-2" />
-          <div className="col">
+          <div className="col text-dark">
             Copyright © [Year] [Your Company Name]. All rights reserved.
           </div>
           <div className="col-2" />
@@ -342,3 +371,4 @@ export default function Admin() {
     </div>
   );
 }
+

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Forgetpassword() {
@@ -31,25 +32,28 @@ export default function Forgetpassword() {
 
         setLoading(true);
         try {
-            const response = await fetch(`http://localhost:3000/reset-password`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(body),
-            });
+            // Replace fetch with axios
+            const response = await axios.patch(
+                `http://localhost:3000/reset-password`, 
+                body, 
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                }
+            );
 
-            const result = await response.json();
-            console.log("Password reset result: ", result);
+            console.log("Password reset result: ", response.data);
 
-            if (response.ok) {
+            // Check if the response is successful
+            if (response.status === 200) {
                 setSuccess("Password reset successful!");
                 setTimeout(() => {
                     navigate('/'); // Redirect to the home page after success
                 }, 1500);
             } else {
-                setError(result.message || "Error resetting password");
+                setError(response.data.message || "Error resetting password");
             }
         } catch (error) {
             setError("An error occurred while resetting the password.");

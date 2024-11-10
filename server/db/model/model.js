@@ -18,7 +18,7 @@ let user = new mongoose.Schema({
         type :String,
         // required : true,
     },
-    joiningdate: {
+    joiningDate: {
         type :String,
         // required : true,
     },

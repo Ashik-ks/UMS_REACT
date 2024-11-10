@@ -92,10 +92,10 @@
   
   }
   
-  #passwordlogin,
-  #emaillogin,
+  .passwordlogin,
+  .emaillogin,
   .forgetpass {
-    width: 85%;
+    width: 90%;
     margin: auto;
   }
   
@@ -103,7 +103,14 @@
     background-color: transparent;
     border: none;
     text-decoration: underline;
+  }
+  .forgetpasslink{
     color: #CD98E3;
+
+  }
+  .forgetpass{
+    display: flex;
+    justify-content: start;
   }
   
   #title {

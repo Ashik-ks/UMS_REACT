@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from 'axios'; // Import axios
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './ResetPassword.css'; // Custom CSS for enhanced design
 
 export default function Resetpassword() {
     // Getting the query parameters from the URL
@@ -18,6 +20,7 @@ export default function Resetpassword() {
     // State to handle form data
     const [password, setPassword] = useState('');
     const [newpassword, setNewPassword] = useState('');
+    // const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
@@ -26,6 +29,12 @@ export default function Resetpassword() {
     const handleProfileSubmit = async (event) => {
         event.preventDefault();
         console.log("Reset password button clicked...", newpassword, password);
+
+        // Check if password and confirm password match
+        // if (newpassword !== confirmPassword) {
+        //     setError("Passwords do not match.");
+        //     return;
+        // }
 
         // Preparing the data to send in the PUT request
         const dataToSubmit = { password, newpassword };
@@ -39,25 +48,26 @@ export default function Resetpassword() {
         setLoading(true); // Show loading state
 
         try {
-            const response = await fetch(`http://localhost:3000/passwordreset/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(dataToSubmit),
-            });
+            const response = await axios.put(
+                `http://localhost:3000/passwordreset/${id}`,
+                dataToSubmit,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                }
+            );
 
-            const result = await response.json();
-            console.log("Employee Data after password reset: ", result);
+            console.log("Employee Data after password reset: ", response.data);
 
-            if (response.ok) {
+            if (response.status === 200) {
                 setSuccess("Password reset successful!");
                 setTimeout(() => {
                     navigate('/'); // Redirect to the home page after success
                 }, 1500); // Delay to show success message
             } else {
-                setError(result.message || "Error resetting password");
+                setError(response.data.message || "Error resetting password");
             }
         } catch (error) {
             setError("An error occurred while resetting the password.");
@@ -68,52 +78,79 @@ export default function Resetpassword() {
     };
 
     return (
-        <>
-            <div className="resetpasswordbody">
-                <div className="divbgimg" />
-                <div className="resetformdiv">
-                    <div className="resetpasswordcontainer">
-                        <h1 className="resetformtext1">Reset Password</h1>
+        <div className="reset-password-container">
+            <div className="card">
+                <div className="card-body">
+                    <h2 className="card-title text-center mb-4">Reset Your Password</h2>
+                    <p className="text-center text-muted mb-4">
+                        Follow the instructions to create a strong password.
+                    </p>
 
-                        {/* Display error or success message */}
-                        {success && <div className="alert alert-success">{success}</div>}
-                        {error && <div className="alert alert-danger">{error}</div>}
+                    {/* Display error or success message */}
+                    {success && <div className="alert alert-success">{success}</div>}
+                    {error && <div className="alert alert-danger">{error}</div>}
 
-                        <form onSubmit={handleProfileSubmit} className="reset-password-form">
-                            <label htmlFor="resetpassword" className="resetformtext">
-                                Current Password:
-                            </label>
+                    <form onSubmit={handleProfileSubmit}>
+                        {/* Password Tips Section */}
+                        <div className="password-tips mb-4">
+                            <h5 className="text-primary">Choose a Strong Password</h5>
+                            <ul>
+                                <li><strong>Don't reuse passwords</strong> from other accounts.</li>
+                                <li><strong>At least 8 characters</strong>: Use a minimum of 8 characters.</li>
+                                <li><strong>Avoid obvious passwords</strong>: Don't use names or common phrases.</li>
+                                <li><strong>Be cautious of staying signed in</strong> on shared devices.</li>
+                            </ul>
+                        </div>
+
+                        {/* Current Password Input */}
+                        <div className="form-group mb-3">
+                            <label htmlFor="resetpassword" className="form-label">Current Password</label>
                             <input
                                 type="password"
                                 id="resetpassword"
-                                className="resetpassword"
+                                className="form-control"
                                 name="current-password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
-                            
-                            <label htmlFor="newpassword" className="resetformtext">
-                                New Password:
-                            </label>
+                        </div>
+
+                        {/* New Password Input */}
+                        <div className="form-group mb-3">
+                            <label htmlFor="newpassword" className="form-label">New Password</label>
                             <input
                                 type="password"
                                 id="newpassword"
-                                className="resetpassword mb-4"
+                                className="form-control"
                                 name="new-password"
                                 value={newpassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
                                 required
                             />
-                            
-                            <button type="submit" className="resetpasswordBtn" disabled={loading}>
-                                {loading ? "Resetting..." : "Reset Password"}
-                            </button>
-                        </form>
-                    </div>
+                        </div>
+
+                        {/* Confirm New Password Input
+                        <div className="form-group mb-4">
+                            <label htmlFor="confirmpassword" className="form-label">Confirm New Password</label>
+                            <input
+                                type="password"
+                                id="confirmpassword"
+                                className="form-control"
+                                name="confirm-password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
+                        </div> */}
+
+                        {/* Submit Button */}
+                        <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                            {loading ? "Resetting..." : "Reset Password"}
+                        </button>
+                    </form>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
-

@@ -14,7 +14,8 @@ import "./Components/singleview/Singleview.css"
 import Resetpassword from './Components/resetpassword/resetpassword';
 import "./Components/resetpassword/resetpassword.css"
 import Updateemployee from './Components/updateemployee/Updateemployee';
-import "./Components/updateemployee/Updateemployee.css"
+import "./Components/updateemployee/Updateemployee.css";
+
 
 function App() {
   return (

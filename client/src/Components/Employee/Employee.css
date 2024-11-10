@@ -5,40 +5,10 @@
 .profileimg {
     width: 30px;
   }
-  
-.editbtn1 {
-    width: 40%;
-    background-color: #d685df;
-    border: none;
-    padding: 2px;
-    color: white;
-    border-radius: 3px;
-    font-size: 14px;
-    font-weight: 500;
-  }
-  .logout-link {
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .logout-link1 {
-    color: rgb(230, 18, 18);
-    background-color: transparent;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  #logoutdiv {
-    display: none;
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #dc3545;
-    background-color: #f8d7da;
-    border-radius: 5px;
+  .employeebody{
+    margin-top: 5%;
+    background-color: white;
+    box-shadow: 5px 5px 15px 0px rgba(0, 0, 0, 0.033);
   }
   
   .text-danger {
@@ -56,5 +26,35 @@
   }
   .row {
     margin-bottom: 20px;
+  }
+  .Editbtn{
+    font-size: 20px;
+    background-color:transparent; /* Pink background color */
+    color:  #F472B6;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 40px;
+  }
+  .resetformoffcanvas{
+    margin: 0;
+    padding: 0;
+  }
+  .logoutbtn{
+    background-color:transparent; /* Pink background color */
+    color:  #F472B6;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 20px;
+  }
+  .logoutdiv{
+    margin-left: 30px;
+    margin-top: 7px;
+  }
+  .welcomediv{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
   

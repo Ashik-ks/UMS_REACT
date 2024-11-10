@@ -2,33 +2,51 @@
     margin: 0;
     padding: 0;
 }
+.formingcontainer{
+  background-color: rgba(255, 255, 255, 0.91);
+}
 .form-container1 {
     margin: auto;
-    margin-top: 6%;
-    background-image: url('./images/WhatsApp\ Image\ 2024-10-09\ at\ 12.32.24_0a5cc346.jpg');
+    margin-top: 2%;
+    margin-bottom: 2%;
     color: black;
     padding: 30px;
     border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 20px rgba(158, 155, 158, 0.336);
+    background-color: rgba(255, 255, 255, 0.201);
     width: 100%;
-    max-width: 400px;
+    height: 530px;
+    max-width: 500px;
     transition: all 0.3s ease;
   }
-  
+.containerdiv {
+  background-color: #e5caea1b;
+  /* Apply the inset box shadow */
+  box-shadow: inset 0 4px 15px rgba(87, 21, 106, 0.1);
+}
+
   .form-container1 h2 {
     text-align: center;
     margin-bottom: 20px;
     animation: fadeIn 0.5s;
   }
-  .adduser {
+  .adduserbody{
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(to right, #e9c5e9, #d685df);
+    --color: rgba(235, 181, 232, 0.225);
+    background-color: #f3f5f5;
+    background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent),
+        linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%,transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%,transparent);
+    background-size: 55px 55px;
     color: #0a0808;
-    height: 100%;
   }
-  
+  .adduser-image{
+    width: 80%;
+    height: 530px;
+    margin-top: 40px;
+    border-radius: 7px;
+  }
   #userForm {
     display: flex;
     flex-direction: column;
@@ -55,6 +73,23 @@
   color: white;
   text-decoration: none;
   font-weight: 500;
+}
+.fa-long-arrow-left{
+  font-size: 40px;
+  font-weight: 500;
+  color:  #d685df;
+  margin-right: 10px;
+}
+.arrowbtn{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 0;
+  background-color: transparent;
+  border: none;
+  margin-left: 10px;
+  font-size: 13px;
 }
 
     

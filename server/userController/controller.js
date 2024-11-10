@@ -9,7 +9,7 @@ const sendEmail = require("../utils/send-email").sendEmail;
   
 exports.Adduser = async function (req, res) {
     try {
-        const { name, email, joiningdate, password, image } = req.body;
+        const { name, email, joiningDate, password, image } = req.body;
         console.log("body: ", req.body);
 
         // Generate a random password if one is not provided
@@ -41,7 +41,7 @@ exports.Adduser = async function (req, res) {
         const newUser = {
             email,
             name,
-            joiningdate,
+            joiningDate,
             image: imagePath,
             userType:"Employee",
             password: hashedPassword
@@ -77,8 +77,6 @@ exports.Adduser = async function (req, res) {
         }));
     }
 };
-
-
 
 exports.GetAlluser = async function (req, res) {
     try {
@@ -174,7 +172,7 @@ exports.edituser = async function (req, res) {
         }
 
         const existingUser = await users.findOne({ _id });
-        console.log("existing user : ",existingUser)
+        console.log("existing user : ", existingUser);
         if (!existingUser) {
             let response = error_function({
                 success: false,
@@ -184,38 +182,43 @@ exports.edituser = async function (req, res) {
             return res.status(response.statuscode).send(response);
         }
 
-        let splittedImg;
-        
-        // Handle image upload if provided
+        let updatedImagePath = existingUser.image; // Keep existing image by default
+
         if (body.image) {
-            // If the user has an existing image, get its path segment for deletion
+            // If a new image is provided, handle the image upload process
+            let splittedImg;
+
+            // Only attempt to delete the old image if it exists
             if (existingUser.image) {
                 splittedImg = existingUser.image.split('/')[2];
                 console.log("Existing image path segment:", splittedImg);
+
+                // Delete the old image
+                const imagePathToDelete = path.join('./uploads', 'Users', splittedImg);
+                await fileDelete(imagePathToDelete);
+                console.log("Old image deleted:", imagePathToDelete);
             }
 
             // Upload the new image
-            const img_path = await fileUpload(body.image, "Users");
-            body.image = img_path;
-            console.log("New image path:", img_path);
+            updatedImagePath = await fileUpload(body.image, "Users");
+            console.log("New image path:", updatedImagePath);
+
+            // Update the image field in the request body
+            body.image = updatedImagePath;
+        } else {
+            // If no image is provided, keep the existing image
+            body.image = existingUser.image;
         }
 
-        // Update user in the database
+        // Update the user in the database
         const updateUser = await users.updateOne({ _id }, { $set: body });
         console.log("Update result:", updateUser);
-
-        // Delete old image if it exists
-        if (splittedImg) {
-            const imagePathToDelete = path.join('./uploads', 'Users', splittedImg);
-            await fileDelete(imagePathToDelete);
-            console.log("Old image deleted:", imagePathToDelete);
-        }
 
         let response = success_function({
             success: true,
             statuscode: 200,
-            message: "User updated successfully", // Changed message
-            data: updateUser, // Include updated user data
+            message: "User updated successfully",
+            data: updateUser,
         });
         return res.status(response.statuscode).send(response);
 

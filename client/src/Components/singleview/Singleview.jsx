@@ -75,10 +75,10 @@ export default function Singleview() {
   return (
     <>
       <div className="adduser">
-        <div className="container-fluid bg-dark">
+        <div className="container-fluid m-0 p-0">
           <nav className="navbar d-flex justify-content-center">
             <ul className="mt-1">
-              <button className="border-0 bg-transparent text-light fs-5 fw-bold" onClick={passtoken}>admin</button>
+              <button className="border-0 bg-transparent fs-5 fw-bold Home" onClick={passtoken}>Home</button>
             </ul>
           </nav>
         </div>
@@ -86,7 +86,7 @@ export default function Singleview() {
         <div className="container mt-5">
           <div className="row">
             <div className="col-3" />
-            <div className="col-6 fs-2 fw-bold text-decoration-underline">
+            <div className="col-6 fs-2 fw-bold text-decoration-underline text-dark">
               Profile Details
             </div>
             <div className="col-3" />
@@ -97,13 +97,7 @@ export default function Singleview() {
           <div className="row">
             <div className="col-3" />
             <div
-              className="col-6 shadow-sm p-3 mb-5 bg-body rounded"
-              style={{
-                backgroundImage: 'url("./images/WhatsApp Image 2024-10-09 at 12.32.24_0a5cc346.jpg")',
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            >
+              className="col-6 profilesettings text-light d-flex d-flex flex-column  lh-lg text-dark">
               <div className="row d-flex flex-column justify-content-center align-items-center">
                 <div className="col text-center mt-3">
                   {/* Correct image path */}
@@ -120,116 +114,116 @@ export default function Singleview() {
                 </div>
 
                 <div className="col fs-4 fw-bold  mb-5">
-                  Join Date: {data[0].joiningdate}
+                  Join Date: {data[0].joiningDate}
                 </div>
               </div>
             </div>
             <div className="col-3" />
           </div>
         </div>
-        <div className="container-fluid mt-5 footer">
-  <div className="row">
-    <div className="col-2" />
-    <div className="col-2 d-flex flex-column   mt-3">
-      <div className="row text-decoration-underline ps-2">Quick Links</div>
-      <div className="row">
-        <a href="/" className="text-white text-decoration-none">
-          Home
-        </a>
-      </div>
-      <div className="row">
-        <a href="/features" className="text-white text-decoration-none">
-          Features
-        </a>
-      </div>
-      <div className="row">
-        <a href="/pricing" className="text-white text-decoration-none">
-          Pricing
-        </a>
-      </div>
-      <div className="row">
-        <a href="/support" className="text-white text-decoration-none">
-          Support
-        </a>
-      </div>
-    </div>
-    <div className="col-2 d-flex flex-column   mt-3">
-      <div className="row text-decoration-underline ps-2">Resources</div>
-      <div className="row">
-        <a href="/docs" className="text-white text-decoration-none">
-          Documentation
-        </a>
-      </div>
-      <div className="row">
-        <a href="/api" className="text-white text-decoration-none">
-          API Reference
-        </a>
-      </div>
-      <div className="row">
-        <a href="/faqs" className="text-white text-decoration-none">
-          FAQs
-        </a>
-      </div>
-      <div className="row">
-        <a href="/guides" className="text-white text-decoration-none">
-          User Guides
-        </a>
-      </div>
-    </div>
-    <div className="col-2 d-flex flex-column  mt-3">
-      <div className="row text-decoration-underline ps-2">Legal</div>
-      <div className="row">
-        <a href="/privacy" className="text-white text-decoration-none">
-          Privacy Policy
-        </a>
-      </div>
-      <div className="row">
-        <a href="/terms" className="text-white text-decoration-none">
-          Terms of Service
-        </a>
-      </div>
-      <div className="row">
-        <a href="/blog" className="text-white text-decoration-none">
-          Blog
-        </a>
-      </div>
-    </div>
-    <div className="col-2 d-flex flex-column   mt-3">
-      <div className="row text-decoration-underline ps-2">Connect with Us</div>
-      <div className="row">
-        <a href="/contact" className="text-white text-decoration-none">
-          Contact Us
-        </a>
-      </div>
-      <div className="row">
-        <a href="" className="text-white text-decoration-none">
-          1-800-123-4567
-        </a>
-      </div>
-      <div className="row">
-        <a
-          href="mailto:support@yourcompany.com"
-          className="text-white text-decoration-none"
-        >
-          support@yourcompany.com
-        </a>
-      </div>
-    </div>
-    <div className="col-2" />
-  </div>
-  <div className="row">
-    <div className="col-2" />
-    <div className="col border border-secondary border-top" />
-    <div className="col-2" />
-  </div>
-  <div className="row mt-3">
-    <div className="col-2" />
-    <div className="col">
-      Copyright © [Year] [Your Company Name]. All rights reserved.
-    </div>
-    <div className="col-2" />
-  </div>
-</div>
+        <div className="container-fluid pt-4 pb-2 footer1">
+                <div className="row">
+                    <div className="col-2" />
+                    <div className="col-2 d-flex flex-column   mt-3">
+                        <div className="row text-decoration-underline ps-2 text-dark">Quick Links</div>
+                        <div className="row">
+                            <a href="/" className="text-dark text-decoration-none">
+                                Home
+                            </a>
+                        </div>
+                        <div className="row">
+                            <a href="/features" className="text-dark text-decoration-none">
+                                Features
+                            </a>
+                        </div>
+                        <div className="row">
+                            <a href="/pricing" className="text-dark text-decoration-none">
+                                Pricing
+                            </a>
+                        </div>
+                        <div className="row">
+                            <a href="/support" className="text-dark text-decoration-none">
+                                Support
+                            </a>
+                        </div>
+                    </div>
+                    <div className="col-2 d-flex flex-column   mt-3">
+                        <div className="row text-decoration-underline ps-2 text-dark">Resources</div>
+                        <div className="row">
+                            <a href="/docs" className="text-dark text-decoration-none">
+                                Documentation
+                            </a>
+                        </div>
+                        <div className="row">
+                            <a href="/api" className="text-dark text-decoration-none">
+                                API Reference
+                            </a>
+                        </div>
+                        <div className="row">
+                            <a href="/faqs" className="text-dark text-decoration-none">
+                                FAQs
+                            </a>
+                        </div>
+                        <div className="row">
+                            <a href="/guides" className="text-dark text-decoration-none">
+                                User Guides
+                            </a>
+                        </div>
+                    </div>
+                    <div className="col-2 d-flex flex-column  mt-3">
+                        <div className="row text-decoration-underline ps-2 text-dark">Legal</div>
+                        <div className="row">
+                            <a href="/privacy" className="text-dark text-decoration-none">
+                                Privacy Policy
+                            </a>
+                        </div>
+                        <div className="row">
+                            <a href="/terms" className="text-dark text-decoration-none">
+                                Terms of Service
+                            </a>
+                        </div>
+                        <div className="row">
+                            <a href="/blog" className="text-dark text-decoration-none">
+                                Blog
+                            </a>
+                        </div>
+                    </div>
+                    <div className="col-2 d-flex flex-column   mt-3">
+                        <div className="row text-decoration-underline ps-2 text-dark">Connect with Us</div>
+                        <div className="row">
+                            <a href="/contact" className="text-dark text-decoration-none">
+                                Contact Us
+                            </a>
+                        </div>
+                        <div className="row">
+                            <a href="" className="text-dark text-decoration-none">
+                                1-800-123-4567
+                            </a>
+                        </div>
+                        <div className="row">
+                            <a
+                                href="mailto:support@yourcompany.com"
+                                className="text-dark text-decoration-none"
+                            >
+                                support@yourcompany.com
+                            </a>
+                        </div>
+                    </div>
+                    <div className="col-2" />
+                </div>
+                <div className="row">
+                    <div className="col-2" />
+                    <div className="col border border-secondary border-top" />
+                    <div className="col-2" />
+                </div>
+                <div className="row ">
+                    <div className="col-2" />
+                    <div className="col text-dark">
+                        Copyright © [Year] [Your Company Name]. All rights reserved.
+                    </div>
+                    <div className="col-2" />
+                </div>
+            </div>
       </div>
     </>
   );
