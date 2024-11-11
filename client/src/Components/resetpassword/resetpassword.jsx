@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios'; // Import axios
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './ResetPassword.css'; // Custom CSS for enhanced design
 
 export default function Resetpassword() {
     // Getting the query parameters from the URL

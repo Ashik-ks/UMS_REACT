@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 
@@ -14,57 +15,53 @@ export default function Admin() {
   const [loading, setLoading] = useState(true);
   const [password, setPassword] = useState('');
   const [newpassword, setNewPassword] = useState('');
-  const [isEditing, setIsEditing] = useState(false); // State to track form visibility
-  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); // State for the logout confirmation modal
-  const [isPageBlurred, setIsPageBlurred] = useState(false); // State to control the blur effect on the page
+  const [isEditing, setIsEditing] = useState(false); 
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); 
+  const [isPageBlurred, setIsPageBlurred] = useState(false); 
 
   useEffect(() => {
     const fetchUsers = async () => {
-      setLoading(true); // Start loading
+      setLoading(true); 
       try {
         const token = localStorage.getItem(tokenData);
-        const response = await fetch('http://localhost:3000/users', {
-          method: 'GET',
+        const response = await axios.get('http://localhost:3000/users', {
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
           },
         });
-        const data = await response.json();
-        setUsers(data.data || []);
+
+        setUsers(response.data.data || []);  // Set users to state
       } catch (error) {
         console.error("Error fetching users:", error);
       } finally {
-        setLoading(false); // End loading
+        setLoading(false);  // End loading
       }
     };
 
     fetchUsers();
-  }, [tokenData]);
+  }, [tokenData]); 
 
-  // Handle password reset form submission
   const handlePasswordReset = async (event) => {
     event.preventDefault();
     const dataToSubmit = { password, newpassword };
-
+  
     try {
       const token = localStorage.getItem(tokenData);
       if (!token) {
         console.error("Token is missing, please log in again.");
         return;
       }
-
-      const response = await fetch(`http://localhost:3000/passwordreset/${id}`, {
-        method: 'PUT',
+  
+      const response = await axios.put(`http://localhost:3000/passwordreset/${id}`, dataToSubmit, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(dataToSubmit),
       });
-
-      if (response.ok) {
-        navigate(`/`); // Redirect to login page after reset
+  
+      if (response.status === 200) {
+        navigate(`/`); 
       } else {
         alert("Password reset failed. Please try again.");
       }
@@ -75,7 +72,6 @@ export default function Admin() {
   };
 
   useEffect(() => {
-    // Disable scrolling when the modal is open
     if (showLogoutConfirmation) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -84,50 +80,45 @@ export default function Admin() {
   }, [showLogoutConfirmation]);
 
   const handleLogout = () => {
-    setShowLogoutConfirmation(true); // Show confirmation modal
-    setIsPageBlurred(true); // Apply blur effect to the page content
+    setShowLogoutConfirmation(true); 
+    setIsPageBlurred(true); 
   };
   
   const cancelLogout = () => {
-    setShowLogoutConfirmation(false); // Hide confirmation modal
-    setIsPageBlurred(false); // Remove blur effect from the page
+    setShowLogoutConfirmation(false); 
+    setIsPageBlurred(false); 
   };
   
 
-  // Confirm logout action (clears token and redirects)
   const confirmLogout = () => {
-    localStorage.removeItem(tokenData); // Clear the token from localStorage
-    navigate('/'); // Navigate to login page
+    localStorage.removeItem(tokenData); 
+    navigate('/'); 
   };
 
-  // Single user view navigation
   const singleview = (_id) => {
     navigate(`/singleview/${_id}/${tokenData}`);
   };
 
-  // Delete user functionality
   const deleteUser = async (userId) => {
     const token = localStorage.getItem(tokenData);
-
+  
     try {
-      const response = await fetch(`http://localhost:3000/users/${userId}`, {
-        method: 'DELETE',
+      const response = await axios.delete(`http://localhost:3000/users/${userId}`, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
       });
-
-      if (response.ok) {
+  
+      if (response.status === 200) {
         alert("User deleted successfully");
-        navigate(0); // Refresh the page after deletion
+        navigate(0);
       }
     } catch (error) {
       console.error("Error deleting user:", error);
     }
   };
 
-  // Toggle visibility of the profile edit form
   const toggleEditForm = () => {
     setIsEditing(!isEditing);
   };

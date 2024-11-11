@@ -10,7 +10,8 @@ module.exports = {
         "name": "Admin",
         "email": "admin@gmail.com",
         "password": "$2b$10$ELV./ZaYNEEnzWN26ik7be1LP21w5pw9DKBW4XGTDha3Y3OIO4kH6",
-        "userType": "Admin"
+        "userType": "Admin",
+        "loginCount" : "1"
       }
     ]).then(res => {
       console.log(res.insertedCount);  // Prints "1"

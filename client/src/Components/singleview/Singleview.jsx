@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, useParams,useNavigate } from "react-router-dom"; 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 
 export default function Singleview() {
   const { id } = useParams();  
@@ -18,29 +19,22 @@ export default function Singleview() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
-        const response = await fetch(`http://localhost:3000/users/${id}`, {
-          method: 'GET',
+        const response = await axios.get(`http://localhost:3000/users/${id}`, {
           headers: {
             'Content-Type': 'application/json',
           },
         });
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
+        console.log("API Response:", response.data);  // Log the entire response
 
-        const result = await response.json();
-        console.log("API Response:", result);  // Log the entire response
-
-        if (!result || !result.data) {
+        if (!response.data || !response.data.data) {
           throw new Error("Data not found");
         }
 
-        let data = result.data;  // Get the data from the response
-        console.log("Fetched Data: ", data);
+        const fetchedData = response.data.data;  // Get the data from the response
+        console.log("Fetched Data:", fetchedData);
 
-        setData(data);  // Set data to state
+        setData(fetchedData);  // Set data to state
 
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -50,7 +44,7 @@ export default function Singleview() {
       }
     };
 
-    fetchData();  // Fetch data when component mounts or when the 'id' changes
+    fetchData(); 
   }, [id]);
 
   const passtoken = () => {
@@ -58,7 +52,6 @@ export default function Singleview() {
     navigate(`/Admin?id=${id}&login=${login}`);
   }
 
-  // Handle loading, error, and successful data fetch
   if (loading) {
     return <p>Loading...</p>;
   }
