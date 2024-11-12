@@ -356,6 +356,14 @@ main {
   border-radius: 20px;
   background-color: #fff;
 }
+/* Custom styling for centering the ToastContainer */
+.toast-container-center {
+  position: fixed !important;
+  top: 6% !important; /* Center vertically */
+  left: 50% !important; /* Center horizontally */
+  transform: translate(-50%, -50%) !important; /* Adjust for true centering */
+  z-index: 9999 !important; /* Make sure the toast is on top */
+}
 
 
 

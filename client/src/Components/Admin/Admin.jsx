@@ -4,6 +4,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'font-awesome/css/font-awesome.min.css';
 
+
 export default function Admin() {
   const location = useLocation();
   const navigate = useNavigate();

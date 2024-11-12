@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; 
+import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import 'font-awesome/css/font-awesome.min.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './AddUser.css';
 
 function AddUser() {
     const tokenkey = new URLSearchParams(window.location.search).get('login');
     const id = new URLSearchParams(window.location.search).get('id');
+    const navigate = useNavigate();
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -13,7 +17,6 @@ function AddUser() {
     const [image, setImage] = useState(null);
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -56,9 +59,7 @@ function AddUser() {
         });
     };
 
-    const submitData = async (dataUrl) => {
-        const tokenkey = new URLSearchParams(window.location.search).get('login');
-        const id = new URLSearchParams(window.location.search).get('id');
+    const submitData = useCallback(async (dataUrl) => {
         const token = localStorage.getItem(tokenkey);
 
         if (!token) {
@@ -75,7 +76,6 @@ function AddUser() {
 
         setLoading(true);
         try {
-            // Replacing fetch with axios
             const response = await axios.post(
                 'http://localhost:3000/users',
                 add_data,
@@ -88,16 +88,45 @@ function AddUser() {
             );
 
             if (response.status === 200) {
-                alert("User added successfully!");
-                // Clear form after submission
+                // Show a success toast (non-blocking)
+                toast.success(
+                    <>
+                        User added successfully!
+                        <button
+                            onClick={handleRedirect}
+                            style={{
+                                marginLeft: '10px',
+                                padding: '2px 7px',
+                                backgroundColor: '#d685df',  // Soft purple background
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '5px',  // More rounded corners
+                                fontSize: '14px',  // A more readable font size
+                                cursor: 'pointer',  // Indicate that the button is clickable
+                                transition: 'background-color 0.3s',  // Smooth background color transition on hover
+                            }}
+                            onMouseOver={(e) => e.target.style.backgroundColor = '#c074cc'} // Change color on hover
+                            onMouseOut={(e) => e.target.style.backgroundColor = '#d685df'} // Revert to original color
+                        >
+                            OK
+                        </button>
+
+                    </>,
+                    {
+                        position: "top-center",
+                        autoClose: false, // Don't auto close
+                        hideProgressBar: true,
+                        closeOnClick: false, // Don't close on click
+                        pauseOnHover: true,
+                    }
+                );
+
+                // Clear form state after user is added
                 setName('');
                 setEmail('');
                 setJoiningDate('');
                 setImage(null);
                 document.getElementById('image').value = ''; // Reset the file input
-                setTimeout(() => {
-                    navigate(`/Admin?id=${id}&login=${tokenkey}`);
-                }, 2000); // Optional delay before navigation
             } else {
                 setMessage(response.data.message || "User not added");
             }
@@ -107,80 +136,101 @@ function AddUser() {
         } finally {
             setLoading(false);
         }
+    }, [name, email, joiningDate, image, navigate]);
+
+    const handleRedirect = () => {
+        navigate(`/Admin?id=${id}&login=${tokenkey}`);
     };
 
-    const prevpage = (()=>{
-        navigate(`/Admin?id=${id}&login=${tokenkey}`);    })
+    const prevpage = () => {
+        navigate(`/Admin?id=${id}&login=${tokenkey}`);
+    };
 
     return (
         <div className="adduserbody pt-3">
-                            <button onClick={prevpage} className='arrowbtn'><i class="fa fa-long-arrow-left" aria-hidden="true"></i>Back</button>
+            <button onClick={prevpage} className='arrowbtn'>
+                <i className="fa fa-long-arrow-left" aria-hidden="true"></i>Back
+            </button>
 
             <div className="container containerdiv ">
                 <div className="row mt-3 pb-4 formingcontainer">
                     <div className="col  d-flex justify-content-end">
                         <img src="../../../public/adduser.jpg" alt="User Add" className="adduser-image" />
                     </div>
-                    <div className="col mt-4"><div className="form-container1">
-                        <h2>User Form</h2>
-                        <form id="userForm" onSubmit={handleSubmit}>
-                            <div className="mb-3">
-                                <label htmlFor="name">Name:</label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    className="form-control"
-                                    placeholder='Enter Name'
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="email">Email:</label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    className="form-control adduseremail"
-                                    placeholder='Enter Email'
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="image">Image:</label>
-                                <input
-                                    type="file"
-                                    id="image"
-                                    name="image"
-                                    className="form-control"
-                                    onChange={handleFileChange}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="joiningdate">Joining Date:</label>
-                                <input
-                                    type="date"
-                                    id="joiningdate"
-                                    name="joiningdate"
-                                    className="form-control"
-                                    value={joiningDate}
-                                    onChange={(e) => setJoiningDate(e.target.value)}
-                                    required
-                                />
-                            </div>
+                    <div className="col mt-4">
+                        <div className="form-container1">
+                            <h2>User Form</h2>
+                            <form id="userForm" onSubmit={handleSubmit}>
+                                <div className="mb-3">
+                                    <label htmlFor="name">Name:</label>
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        className="form-control"
+                                        placeholder='Enter Name'
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="email">Email:</label>
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        className="form-control adduseremail"
+                                        placeholder='Enter Email'
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="image">Image:</label>
+                                    <input
+                                        type="file"
+                                        id="image"
+                                        name="image"
+                                        className="form-control"
+                                        onChange={handleFileChange}
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="joiningdate">Joining Date:</label>
+                                    <input
+                                        type="date"
+                                        id="joiningdate"
+                                        name="joiningdate"
+                                        className="form-control"
+                                        value={joiningDate}
+                                        onChange={(e) => setJoiningDate(e.target.value)}
+                                        required
+                                    />
+                                </div>
 
-                            <button type="submit" className="adduserbtn mt-2" disabled={loading}>
-                                {loading ? 'Submitting...' : 'Submit'}
-                            </button>
-                        </form>
-                        {message && <p className={`text-${loading ? 'success' : 'danger'}`}>{message}</p>}
-                    </div></div>
+                                <button type="submit" className="adduserbtn mt-2" disabled={loading}>
+                                    {loading ? 'Submitting...' : 'Submit'}
+                                </button>
+                            </form>
+                            {message && <p className={`text-${loading ? 'success' : 'danger'}`}>{message}</p>}
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            {/* ToastContainer is now rendered here */}
+            <ToastContainer
+                className="toast-container-center"
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                pauseOnHover
+            />
+
             <div className="container-fluid pt-4 pb-2 footer1">
                 <div className="row">
                     <div className="col-2" />

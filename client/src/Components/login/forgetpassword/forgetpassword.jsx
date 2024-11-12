@@ -66,50 +66,53 @@ console.log("token : ",token)
 
     return (
         <div className="container forgetpasswordcontainer">
-            <div className="row">
-                <div className="col-3" />
-                <div className="col mb-3 lh-lg">
-                    <h1>Reset Your Password</h1>
-                    <form onSubmit={forgotPassword} className="reset-password-form d-flex flex-column">
-                        {/* Error and Success messages */}
-                        {error && <div className="alert alert-danger">{error}</div>}
-                        {success && <div className="alert alert-success">{success}</div>}
+    <div className="row justify-content-center align-items-center vh-100">
+        <div className="col-12 col-md-6 col-lg-4 bg-light shadow-sm p-3 mb-5 bg-body rounded">
+            <h1 className="text-center mb-4">Reset Your Password</h1>
+            <p className="text-center mb-4">
+                If you have forgotten your password, please enter your new password below to reset it.
+                Make sure it is something secure and easy to remember!
+            </p>
+            <form onSubmit={forgotPassword} className="reset-password-form d-flex flex-column">
+                {/* Error and Success messages */}
+                {error && <div className="alert alert-danger">{error}</div>}
+                {success && <div className="alert alert-success">{success}</div>}
 
-                        <label htmlFor="new-password" className="resetformtext ms-3">
-                            New Password
-                        </label>
-                        <input
-                            type="password"
-                            id="forgotNewpassword"
-                            className="forgetpassdiv ms-3"
-                            name="new-password"
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            required
-                        />
+                <label htmlFor="new-password" className="resetformtext ms-3">
+                    New Password
+                </label>
+                <input
+                    type="password"
+                    id="forgotNewpassword"
+                    className="forgetpassdiv ms-3"
+                    name="new-password"
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                />
 
-                        <label htmlFor="confirm-password" className="resetformtext ms-3">
-                            Confirm Password:
-                        </label>
-                        <input
-                            type="password"
-                            id="confirmpassword"
-                            className="forgetpassdiv ms-3"
-                            name="confirm-password"
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                        />
+                <label htmlFor="confirm-password" className="resetformtext ms-3">
+                    Confirm Password
+                </label>
+                <input
+                    type="password"
+                    id="confirmpassword"
+                    className="forgetpassdiv ms-3"
+                    name="confirm-password"
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                />
 
-                        <button
-                            type="submit"
-                            className="forgetpasswordBtn mt-3 ms-3 mb-3"
-                            disabled={loading}
-                        >
-                            {loading ? 'Resetting...' : 'Reset Password'}
-                        </button>
-                    </form>
-                </div>
-                <div className="col-3" />
-            </div>
+                <button
+                    type="submit"
+                    className="btn mt-3 ms-3 mb-3"
+                    disabled={loading}
+                >
+                    {loading ? 'Resetting...' : 'Reset Password'}
+                </button>
+            </form>
         </div>
+    </div>
+</div>
+
     );
 }

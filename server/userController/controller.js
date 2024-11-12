@@ -22,6 +22,7 @@ exports.Adduser = async function (req, res) {
         console.log("Generated password: ", randomPassword);
 
         // Set up email template and send email
+        
         // const email_template = await set_password_template(name, email, randomPassword);
         // await sendEmail(email, "User created", email_template);
 
