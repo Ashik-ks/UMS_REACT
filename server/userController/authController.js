@@ -107,12 +107,11 @@ exports.passwordreset = async function (req, res) {
         if (!user) {
             return res.status(404).send({
                 success: false,
-                statuscode: 404,
                 message: "User not found",
             });
         }
 
-        console.log("User: ", user);
+        console.log("User found: ", user.username || user._id); // Log only non-sensitive info
 
         // Check if the provided current password matches the stored password
         const passwordMatch = await bcrypt.compare(req.body.password, user.password);
@@ -121,7 +120,6 @@ exports.passwordreset = async function (req, res) {
         if (!passwordMatch) {
             return res.status(400).send({
                 success: false,
-                statuscode: 400,
                 message: "Invalid current password",
             });
         }
@@ -130,16 +128,23 @@ exports.passwordreset = async function (req, res) {
         if (req.body.password === req.body.newpassword) {
             return res.status(400).send({
                 success: false,
-                statuscode: 400,
                 message: "New password must be different from the current password",
             });
         }
 
         // Hash the new password
-        const hashedNewPassword = await bcrypt.hash(req.body.newpassword, 10);
-        console.log("Hashed New Password: ", hashedNewPassword);
+        let hashedNewPassword;
+        try {
+            hashedNewPassword = await bcrypt.hash(req.body.newpassword, 10);
+            console.log("Hashed New Password: ", hashedNewPassword); // Don't log full password hash in production!
+        } catch (err) {
+            return res.status(500).send({
+                success: false,
+                message: "Error hashing new password",
+            });
+        }
 
-        // Update the user's password
+        // Update the user's password in the database
         let updateUser = await users.updateOne({ _id }, { $set: { password: hashedNewPassword } });
         console.log("Update User Result: ", updateUser);
 
@@ -151,14 +156,12 @@ exports.passwordreset = async function (req, res) {
 
             return res.status(200).send({
                 success: true,
-                statuscode: 200,
                 message: "Password updated successfully",
                 loginCount: user.loginCount, // Return the updated login count
             });
         } else {
             return res.status(400).send({
                 success: false,
-                statuscode: 400,
                 message: "Password update failed",
             });
         }
@@ -167,11 +170,11 @@ exports.passwordreset = async function (req, res) {
         console.error("Error: ", error);
         return res.status(500).send({
             success: false,
-            statuscode: 500,
-            message: "User updation failed",
+            message: "An error occurred while resetting the password",
         });
     }
 };
+
 
 
 exports.forgotPasswordController = async function (req, res) {

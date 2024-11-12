@@ -18,13 +18,13 @@ export default function Employee() {
     const [isEditing, setIsEditing] = useState(false); // State for toggling password reset form
     const [isOffcanvasOpen, setIsOffcanvasOpen] = useState(false); // Manage offcanvas state
     const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); // State for the logout confirmation modal
-  const [isPageBlurred, setIsPageBlurred] = useState(false); 
+    const [isPageBlurred, setIsPageBlurred] = useState(false); 
     const navigate = useNavigate();
 
     const handleProfileSubmit = async (event) => {
         event.preventDefault();
         console.log("Reset password button clicked...", newpassword, password);
-        
+    
         // Check if both fields are filled before sending the request
         if (password && newpassword) {
             const dataToSubmit = { password, newpassword }; // Prepare the data object
@@ -39,25 +39,38 @@ export default function Employee() {
     
                 console.log("Employee Data after password reset: ", response.data);
     
-                // If the backend responds with an error
-                if (response.status !== 200) {
-                    alert(response.data.message);  // Display the error message returned from the backend
-                    return;
+                // Check if the server returned a success message
+                if (response.status === 200) {
+                    setData(response.data.data);
+    
+                    // Display success message from the server, if available
+                    const successMessage = response.data.message || 'Password reset successful!';
+                    alert(successMessage);
+    
+                    // Navigate to the home page after success
+                    navigate(`/`);
+                } else {
+                    // If the response is not successful, display the error message from the server
+                    alert(response.data.message || 'An error occurred. Please try again.');
                 }
-    
-                setData(response.data.data);
-    
-                // Navigate to the home page after success
-                navigate(`/`); 
     
             } catch (error) {
                 console.error("Error resetting password:", error);
-                alert("An error occurred while resetting your password. Please try again.");
+    
+                // Check if the error response is available and has a message
+                if (error.response && error.response.data && error.response.data.message) {
+                    alert(`Error: ${error.response.data.message}`);
+                } else {
+                    // If no specific message is available, show a generic error message
+                    alert("An error occurred while resetting your password. Please try again.");
+                }
             }
         } else {
             alert("Both current and new passwords are required.");
         }
     };
+    
+    
     
     
     

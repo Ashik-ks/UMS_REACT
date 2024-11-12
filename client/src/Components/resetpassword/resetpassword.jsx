@@ -28,25 +28,27 @@ export default function Resetpassword() {
     const handleProfileSubmit = async (event) => {
         event.preventDefault();
         console.log("Reset password button clicked...", newpassword, password);
-
-        // Check if password and confirm password match
+    
+        // Check if password and confirm password match (if applicable)
         // if (newpassword !== confirmPassword) {
         //     setError("Passwords do not match.");
         //     return;
         // }
-
-        // Preparing the data to send in the PUT request
+    
+        // Prepare the data to send in the PUT request
         const dataToSubmit = { password, newpassword };
-
+    
         // Check if token exists
+        const token = localStorage.getItem(id); // Ensure you're getting the correct token key
         if (!token) {
             setError("No token found, please log in.");
             return;
         }
-
+    
         setLoading(true); // Show loading state
-
+    
         try {
+            // Send PUT request to reset password
             const response = await axios.put(
                 `http://localhost:3000/passwordreset/${id}`,
                 dataToSubmit,
@@ -57,24 +59,33 @@ export default function Resetpassword() {
                     },
                 }
             );
-
-            console.log("Employee Data after password reset: ", response.data);
-
+    
+            console.log("Response after password reset: ", response.data);
+    
+            // Check if the server returned a success status
             if (response.status === 200) {
-                setSuccess("Password reset successful!");
+                // Show success message from server or default message
+                setSuccess(response.data.message || "Password reset successful!");
                 setTimeout(() => {
                     navigate('/'); // Redirect to the home page after success
                 }, 1500); // Delay to show success message
             } else {
-                setError(response.data.message || "Error resetting password");
+                // If the response is not successful, display the error message from the server
+                setError(response.data.message || "Error resetting password.");
             }
         } catch (error) {
-            setError("An error occurred while resetting the password.");
+            // Handle any errors during the request
             console.error("Error resetting password:", error);
+            if (error.response && error.response.data && error.response.data.message) {
+                setError(error.response.data.message); // Show the error message returned by the server
+            } else {
+                setError("An error occurred while resetting the password.");
+            }
         } finally {
             setLoading(false); // End loading state
         }
     };
+    
 
     return (
         <div className="reset-password-container">

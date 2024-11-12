@@ -48,29 +48,50 @@ export default function Admin() {
     const dataToSubmit = { password, newpassword };
   
     try {
-      const token = localStorage.getItem(tokenData);
-      if (!token) {
-        console.error("Token is missing, please log in again.");
-        return;
-      }
+        // Get the token from localStorage
+        const token = localStorage.getItem(id);  // Ensure the key used is correct
+        if (!token) {
+            console.error("Token is missing, please log in again.");
+            alert("You need to log in again. Token is missing.");
+            return;
+        }
   
-      const response = await axios.put(`http://localhost:3000/passwordreset/${id}`, dataToSubmit, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
+        // Send the PUT request to reset the password
+        const response = await axios.put(`http://localhost:3000/passwordreset/${id}`, dataToSubmit, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+        });
   
-      if (response.status === 200) {
-        navigate(`/`); 
-      } else {
-        alert("Password reset failed. Please try again.");
-      }
+        // Check if the server responded successfully
+        if (response.status === 200) {
+            // Display success message if available
+            const successMessage = response.data.message || 'Password reset successfully!';
+            alert(successMessage); // Show the success message from the server
+
+            // Navigate to the home page after success
+            navigate(`/`); 
+        } else {
+            // If the response status is not 200, show the message from the server
+            const errorMessage = response.data.message || 'Password reset failed. Please try again.';
+            alert(errorMessage);
+        }
     } catch (error) {
-      console.error("Error resetting password:", error);
-      alert("An error occurred while resetting the password.");
+        console.error("Error resetting password:", error);
+
+        // Handle specific error cases based on error response from server
+        if (error.response) {
+            // If the error has a response from the server, use that message
+            const errorMessage = error.response.data.message || 'An error occurred while resetting the password.';
+            alert(errorMessage);
+        } else {
+            // If no response from server, show a generic error message
+            alert("An error occurred while resetting the password.");
+        }
     }
-  };
+};
+
 
   useEffect(() => {
     if (showLogoutConfirmation) {
