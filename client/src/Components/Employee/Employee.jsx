@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Import Bootstrap JS
+import axios from 'axios';
+
 
 export default function Employee() {
     const queryParams = new URLSearchParams(window.location.search);
@@ -22,35 +24,31 @@ export default function Employee() {
     const handleProfileSubmit = async (event) => {
         event.preventDefault();
         console.log("Reset password button clicked...", newpassword, password);
-    
+        
         // Check if both fields are filled before sending the request
         if (password && newpassword) {
             const dataToSubmit = { password, newpassword }; // Prepare the data object
     
             try {
-                const response = await fetch(`http://localhost:3000/passwordreset/${id}`, {
-                    method: 'PUT',
+                const response = await axios.put(`http://localhost:3000/passwordreset/${id}`, dataToSubmit, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`,
                     },
-                    body: JSON.stringify(dataToSubmit),
                 });
     
-                const result = await response.json();
-                console.log("Employee Data after password reset: ", result);
+                console.log("Employee Data after password reset: ", response.data);
     
-                if (!response.ok) {
-                    // If the backend responds with an error
-                    alert(result.message);  // Display the error message returned from the backend
+                // If the backend responds with an error
+                if (response.status !== 200) {
+                    alert(response.data.message);  // Display the error message returned from the backend
                     return;
                 }
     
-                setData(result.data);
+                setData(response.data.data);
     
-                if (response.ok) {
-                    navigate(`/`); // Navigate to the home page after success
-                }
+                // Navigate to the home page after success
+                navigate(`/`); 
     
             } catch (error) {
                 console.error("Error resetting password:", error);
@@ -88,26 +86,23 @@ export default function Employee() {
         console.log("Update btn clicked");
         navigate(`/updateemployee/${id}`);
     };
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/users/${id}`, {
-                    method: 'GET',
+                const response = await axios.get(`http://localhost:3000/users/${id}`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
-
-                const result = await response.json();
-                console.log("Employee Data: ", result);
-                setData(result.data); // Assuming result.data is the employee object
-
+    
+                console.log("Employee Data: ", response.data);
+                setData(response.data.data); // Assuming response.data.data is the employee object
+    
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
-
+    
         if (id) {
             fetchData();
         }

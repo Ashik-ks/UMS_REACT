@@ -1,37 +1,39 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-export default function Emailverification() {
+export default function EmailVerification() {
+    const [email, setEmail] = useState('');
+    const navigate = useNavigate();
 
-    const [email,Setemail] = useState('')
+    const emailverify = async (event) => {
+        event.preventDefault(); // Prevent the default form submission
 
-const emailverify = (async ()=> {
-    const body = {
-        email
-    }
-   
+        const body = { email };
 
-    try {
-        const response = await fetch(`http://localhost:3000/forgot-password`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json', 
-          },
-          body:JSON.stringify(body),
-        });
-  
-        if (response.ok) {
-          alert("Email verified succefully");
-          navigate(`/`);
-        } else {
-          alert("Email verification failed");
+        try {
+            console.log("emailverify function called");
+            const response = await axios.post('http://localhost:3000/forgot-password', body, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log("Response:", response);
+
+            if (response.status === 200) {
+                alert("Email verified successfully");
+                navigate(`/`);
+            } else {
+                alert(`Failed with status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error("Error verifying email:", error);
+            const message = error.response?.data?.message || "An error occurred while verifying email";
+            alert(message);
         }
-      } catch (error) {
-        console.error("Error verify email:", error);
-        alert("An error occurred while verify email");
-      }
-})
-
+    };
 
     return (
         <>
@@ -51,11 +53,11 @@ const emailverify = (async ()=> {
                                 type="email"
                                 id="forgotemail"
                                 name="email"
-                                onChange={(e) => Setemail(e.target.value)}
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="form-control"
                                 required=""
                             />
-                            <button type="submit" className="verifybtn  mt-3">
+                            <button type="submit" className="verifybtn mt-3">
                                 Verify Email
                             </button>
                         </form>
@@ -63,5 +65,5 @@ const emailverify = (async ()=> {
                 </div>
             </div>
         </>
-    )
+    );
 }

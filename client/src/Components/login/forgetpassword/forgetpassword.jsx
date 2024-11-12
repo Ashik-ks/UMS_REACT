@@ -4,8 +4,9 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Forgetpassword() {
-    const { token } = useParams();  
-    console.log("Received reset token: ", token);
+ let params = new URLSearchParams(window.location.search);
+let token = params.get('token');
+console.log("token : ",token)
 
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');

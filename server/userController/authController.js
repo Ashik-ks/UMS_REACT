@@ -196,9 +196,9 @@ exports.forgotPasswordController = async function (req, res) {
                     { $set: { password_token: reset_token } }
                 );
                 if (data.matchedCount === 1 && data.modifiedCount == 1) {
-                    let reset_link = `${process.env.FRONTEND_URL}?token=${reset_token}`;
+                    // let reset_link = `${process.env.FRONTEND_URL}?token=${reset_token}`;
                     // let email_template = await resetPassword(user.name, reset_link);
-                    // sendEmail(email, "Forgot password", email_template);
+                    sendEmail(email, "Forgot password", email_template);
                     let response = success_function({
                         statuscode: 200,
                         message: "Email sent successfully",
@@ -214,7 +214,7 @@ exports.forgotPasswordController = async function (req, res) {
         let response = {
             success: false,
             statuscode: 500,
-            message: "User updation failed",
+            message: "Email verification failed",
         };
         res.status(response.statuscode).send(response);
     }
@@ -224,8 +224,10 @@ exports.passwordResetController = async function (req, res) {
     try {
         const authHeader = req.headers["authorization"];
         const token = authHeader.split(" ")[1];
+        console.log("token : ",token)
 
-        let password = req.body.password;
+        let password = req.body.confirmpassword;
+        console.log("password : ",password)
 
         decoded = jwt.decode(token);
         //console.log("user_id : ", decoded.user_id);

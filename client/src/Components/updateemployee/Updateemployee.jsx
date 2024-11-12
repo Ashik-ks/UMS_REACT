@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 
 export default function UpdateEmployee() {
   const { id } = useParams();
@@ -18,96 +19,90 @@ export default function UpdateEmployee() {
 
   // Check if token exists, and navigate to login if not
   useEffect(() => {
-    if (!token) {
-      navigate('/');  // Redirect to login if no token
-    }
-  }, [token, navigate]);  // Only run this effect when token or navigate changes
+      if (!token) {
+          navigate('/');  // Redirect to login if no token
+      }
+  }, [token, navigate]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`http://localhost:3000/users/${id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+      const fetchData = async () => {
+          setLoading(true);
+          try {
+              const response = await axios.get(`http://localhost:3000/users/${id}`, {
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+              });
 
-        if (response.ok) {
-          const result = await response.json();
-          if (result.data) {
-            const { name, email, joiningDate, image } = result.data[0];
-            setName(name);
-            setEmail(email);
-            setJoiningDate(joiningDate);
-            setImage(image);
+              if (response.data && response.data.data) {
+                  const { name, email, joiningDate, image } = response.data.data[0];
+                  setName(name);
+                  setEmail(email);
+                  setJoiningDate(joiningDate);
+                  setImage(image);
+              } else {
+                  setError('Failed to fetch user data.');
+              }
+          } catch (error) {
+              setError('An error occurred while fetching the data.');
+          } finally {
+              setLoading(false);
           }
-        } else {
-          setError('Failed to fetch user data.');
-        }
-      } catch (error) {
-        setError('An error occurred while fetching the data.');
-      } finally {
-        setLoading(false);
-      }
-    };
+      };
 
-    if (id) fetchData();
+      if (id) fetchData();
   }, [id]);
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageBase64(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImageBase64(image); // Keep the existing image if no new image is selected
-    }
+      const file = e.target.files[0];
+      if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+              setImageBase64(reader.result);
+          };
+          reader.readAsDataURL(file);
+      } else {
+          setImageBase64(image); // Keep the existing image if no new image is selected
+      }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+      e.preventDefault();
 
-    if (!validateEmail(email)) {
-      alert("Please enter a valid email.");
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-
-    const body = {
-      name,
-      email,
-      joiningDate,
-      image: imageBase64,
-    };
-
-    try {
-      const response = await fetch(`http://localhost:3000/users/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (response.ok) {
-        alert("User updated successfully");
-        navigate(`/employee?id=${id}`);
-      } else {
-        setError('Failed to update user. Please try again.');
+      if (!validateEmail(email)) {
+          alert("Please enter a valid email.");
+          return;
       }
-    } catch (error) {
-      setError('An error occurred while updating the employee.');
-    } finally {
-      setLoading(false);
-    }
+
+      setLoading(true);
+      setError('');
+
+      const body = {
+          name,
+          email,
+          joiningDate,
+          image: imageBase64,
+      };
+
+      try {
+          const response = await axios.put(`http://localhost:3000/users/${id}`, body, {
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+              },
+          });
+
+          if (response.status === 200) {
+              alert("User updated successfully");
+              navigate(`/employee?id=${id}`);
+          } else {
+              setError('Failed to update user. Please try again.');
+          }
+      } catch (error) {
+          setError('An error occurred while updating the employee.');
+      } finally {
+          setLoading(false);
+      }
   };
 
   const validateEmail = (email) => {

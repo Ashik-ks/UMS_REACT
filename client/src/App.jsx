@@ -15,6 +15,8 @@ import Resetpassword from './Components/resetpassword/resetpassword';
 import "./Components/resetpassword/resetpassword.css"
 import Updateemployee from './Components/updateemployee/Updateemployee';
 import "./Components/updateemployee/Updateemployee.css";
+import Forgetpassword from './Components/login/forgetpassword/forgetpassword';
+ import "./Components/login/forgetpassword/forgetpassword.css"
 
 
 function App() {
@@ -29,6 +31,7 @@ function App() {
         <Route path="/singleview/:id/:login" element={<Singleview />} />
         <Route path="/resetpassword" element={<Resetpassword />} />
         <Route path="/updateemployee/:id" element={<Updateemployee />} />
+        <Route path="/forgetpassword" element={<Forgetpassword />} />
         </Routes>
     </Router>
   );
