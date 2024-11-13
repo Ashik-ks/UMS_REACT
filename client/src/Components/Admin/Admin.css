@@ -364,6 +364,9 @@ main {
   transform: translate(-50%, -50%) !important; /* Adjust for true centering */
   z-index: 9999 !important; /* Make sure the toast is on top */
 }
+.admincontainerimg{
+  width: 70px;
+}
 
 
 

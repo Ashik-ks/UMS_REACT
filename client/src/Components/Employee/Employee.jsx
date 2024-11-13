@@ -258,7 +258,7 @@ export default function Employee() {
                             </div>
                             <div className="col-6">
                                 <div className="col text-center mt-5">
-                                    <img src={data[0].image} alt="Employee" className="singleusercontainerimg" />
+                                    <img src={`http://localhost:3000/${data[0].image}`} alt="Employee" className="singleusercontainerimg" />
                                 </div>
                                 <div className="col text-center text-dark mb-3 mt-3"
                                     style={{ fontSize: 18, fontWeight: 700 }}

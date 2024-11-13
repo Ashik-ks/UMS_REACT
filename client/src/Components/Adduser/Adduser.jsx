@@ -4,7 +4,7 @@ import axios from 'axios';
 import 'font-awesome/css/font-awesome.min.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './AddUser.css';
+
 
 function AddUser() {
     const tokenkey = new URLSearchParams(window.location.search).get('login');

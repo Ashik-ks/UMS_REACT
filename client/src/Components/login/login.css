@@ -92,11 +92,18 @@
   
   }
   
-  .passwordlogin,
+  
   .emaillogin,
   .forgetpass {
     width: 90%;
     margin: auto;
+  }
+  .passwordlogin{
+    width: 90%;
+    margin: auto;
+  }
+  .passwordhidden{
+    width: 10%;
   }
   
   .forgetpass {

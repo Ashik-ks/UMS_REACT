@@ -255,7 +255,7 @@ export default function Admin() {
                 <div className="user-card shadow-sm p-3 mb-4 bg-light rounded" key={user._id}>
                   <div className="user-card-content">
                     {user.image && (
-                      <img src={`http://localhost:3000/uploads/Users/${user.image}`} alt={user.name} />
+                      <img src={`http://localhost:3000/${user.image}`} alt={user.name} className="admincontainerimg"/>
                     )}
                     <div className="user-details">
                       <div className="user-name">{user.name}</div>

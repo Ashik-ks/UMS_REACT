@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false); // State for loading
+    const [showPassword, setShowPassword] = useState(false); // State for password visibility
     const navigate = useNavigate(); 
 
     const login = async (event) => {
@@ -17,7 +19,6 @@ export default function Login() {
         const data = { email, password };
 
         try {
-            // Replacing fetch with axios
             const response = await axios.post('http://localhost:3000/login', data, {
                 headers: {
                     'Content-Type': "application/json",
@@ -25,20 +26,16 @@ export default function Login() {
             });
 
             if (response.status !== 200) {
-                // If the response status is not 200 (OK), handle error
                 alert(response.data.message || "An error occurred");
                 return;
             }
 
-            // Extract the data from the response
             const { token, tokenId, loginCount, userTypes } = response.data.data;
             console.log("Parsed response:", response.data);
 
-            // Store the token in localStorage
-            localStorage.setItem(tokenId, token); // Store the token with the tokenId as the key
+            localStorage.setItem(tokenId, token); // Store the token
             console.log("Token stored successfully.");
 
-            // Navigate based on the user type and login count
             if (loginCount === 0) {
                 navigate(`/resetpassword?id=${tokenId}`);
             } else if (userTypes === 'Admin') {
@@ -56,6 +53,10 @@ export default function Login() {
         } finally {
             setLoading(false); // End loading
         }
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
     };
 
     return (
@@ -86,16 +87,25 @@ export default function Login() {
                                     placeholder="Enter Your Email"
                                     required
                                 />
-                                <input
-                                    type="password"
-                                    name="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="form-control border-0 shadow-sm bg-body rounded mb-3 passwordlogin"
-                                    placeholder="Enter Your Password"
-                                    required
-                                />
-                                <div className="mb-3">
+                                <div className="passwordlogin d-flex border-0 shadow-sm bg-body rounded">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="form-control border-0"
+                                        placeholder="Enter Your Password"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        className=" passwordhidden border-0  bg-light"
+                                        onClick={togglePasswordVisibility}
+                                    >
+                                        <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                                <div className="mb-3 mt-2">
                                     <button type="button" className="forgetpass text-start">
                                         <Link to="/email-verification" className="forgetpasslink">Forgot Your Password?</Link>
                                     </button>
