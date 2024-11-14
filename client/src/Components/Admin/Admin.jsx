@@ -216,15 +216,16 @@ export default function Admin() {
     />
     <button
       type="button"
-      className="passwordtogglebtn border-0 bg-light position-absolute end-0 top-45 translate-middle-y ms-2"
+      className="passwordtogglebtn border-0 bg-white position-absolute end-1 top-50 translate-middle-y"
       onClick={togglePasswordVisibility}
+      style={{ right: '10px' }} // Adjust this value as needed
     >
       <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true"></i>
     </button>
   </div>
 </div>
 
-      <div className="mb-3 coolinput">
+<div className="mb-3 coolinput">
   <label htmlFor="newpassword" className="coolinputlabeltext">New Password:</label>
   <div className="password-container position-relative">
     <input
@@ -239,13 +240,15 @@ export default function Admin() {
     />
     <button
       type="button"
-      className="password-toggle border-0 bg-light position-absolute end-0 top-45 translate-middle-y"
+      className="password-toggle border-0 bg-white position-absolute end-1 top-50 translate-middle-y"
       onClick={toggleNewPasswordVisibility}
+      style={{ right: '10px' }} // Adjust spacing as necessary
     >
       <i className={`fa ${showNewPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true"></i>
     </button>
   </div>
 </div>
+
 
                       <button type="submit" className="Btn mt-2">Submit</button>
                     </form>

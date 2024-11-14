@@ -332,8 +332,8 @@ main {
   font-size: 0.75rem;
   color: #F472B6;
   font-weight: 700;
-  position: relative;
-  top: 0.5rem;
+  /* position: relative;
+  top: 0.5rem; */
   margin: 0 0 0 7px;
   padding: 0 3px;
   background: white;
@@ -367,7 +367,13 @@ main {
 .admincontainerimg{
   width: 70px;
 }
+.password-container {
+  display: flex; /* Allows for better alignment */
+}
 
+.coolinputinput {
+  padding-right: 45px; /* Adjust to ensure text doesn't overlap the button */
+}
 
 
 

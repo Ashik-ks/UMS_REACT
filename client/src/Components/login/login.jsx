@@ -99,7 +99,7 @@ export default function Login() {
                                     />
                                     <button
                                         type="button"
-                                        className="passwordhidden border-0 bg-light position-absolute end-0 top-50 translate-middle-y"
+                                        className="passwordhidden border-0 bg-white position-absolute end-0 top-50 translate-middle-y"
                                         onClick={togglePasswordVisibility}
                                     >
                                         <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true"></i>

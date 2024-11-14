@@ -60,4 +60,11 @@
   .singleusercontainerimg{
     width: 130px;
   }
+  .position-relative {
+    display: flex; /* Enables flex layout for better alignment */
+  }
+  
+  .coolinputinput {
+    padding-right: 40px; /* Adds space for the toggle button */
+  }
   
