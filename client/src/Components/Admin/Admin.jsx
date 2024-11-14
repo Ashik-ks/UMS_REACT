@@ -156,7 +156,7 @@ export default function Admin() {
   };
 
   return (
-    <div className={`adduser1 ${isPageBlurred ? 'blurred' : ''}`}>
+    <div className={`adduser1`}>
       <div className="container-fluid adminpage">
         <nav className="sidebar">
           <ul>

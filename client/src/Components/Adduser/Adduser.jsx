@@ -149,7 +149,7 @@ function AddUser() {
     return (
         <div className="adduserbody pt-3">
             <button onClick={prevpage} className='arrowbtn'>
-                <i className="fa fa-long-arrow-left" aria-hidden="true"></i>Back
+                <i className="fa fa-long-arrow-left" aria-hidden="true"></i>
             </button>
 
             <div className="container containerdiv ">

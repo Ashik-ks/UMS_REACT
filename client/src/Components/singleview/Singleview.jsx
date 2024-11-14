@@ -94,7 +94,7 @@ export default function Singleview() {
               <div className="row d-flex flex-column justify-content-center align-items-center">
                 <div className="col text-center mt-3">
                   {/* Correct image path */}
-                  <img src={`http://localhost:3000${data[0].image}`} className="singleusercontainerimg" alt="User" />
+                  <img src={`http://localhost:3000/${data[0].image}`} className="singleusercontainerimg" alt="User" />
                 </div>
 
                 <div className="col  mb-4 mt-3 fs-4 fw-bold">
