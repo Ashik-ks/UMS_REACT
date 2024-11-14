@@ -19,6 +19,8 @@ export default function Admin() {
   const [isEditing, setIsEditing] = useState(false); 
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); 
   const [isPageBlurred, setIsPageBlurred] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -145,6 +147,14 @@ export default function Admin() {
     setIsEditing(!isEditing);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(prevState => !prevState);
+  };
+
+  const toggleNewPasswordVisibility = () => {
+    setShowNewPassword(prevState => !prevState);
+  };
+
   return (
     <div className={`adduser1 ${isPageBlurred ? 'blurred' : ''}`}>
       <div className="container-fluid adminpage">
@@ -191,29 +201,52 @@ export default function Admin() {
 
                   {isEditing && (
                     <form onSubmit={handlePasswordReset} className="resetform">
-                      <div className="mb-3 coolinput">
-                        <label htmlFor="resetpassword" className="coolinputlabeltext" >Current Password:</label>
-                        <input type="password" id="" name="password"
-                        className="coolinputinput"
-                        placeholder="Enter Current password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        />
-                      </div>
-                      <div className="mb-3 coolinput">
-                        <label htmlFor="newpassword" className="coolinputlabeltext">New Password:</label>
-                        <input
-                          type="password"
-                          id="newpassword"
-                          name="newpassword"
-                          className="coolinputinput"
-                          placeholder="Enter New password"
-                          value={newpassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                          required
-                        />
-                      </div>
+                     <div className="mb-3 coolinput">
+  <label htmlFor="resetpassword" className="coolinputlabeltext">Current Password:</label>
+  <div className="password-container position-relative">
+    <input
+      type={showPassword ? "text" : "password"} // Toggle between text and password input
+      id="resetpassword"
+      name="password"
+      className="coolinputinput"
+      placeholder="Enter Current password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      required
+    />
+    <button
+      type="button"
+      className="passwordtogglebtn border-0 bg-light position-absolute end-0 top-45 translate-middle-y ms-2"
+      onClick={togglePasswordVisibility}
+    >
+      <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true"></i>
+    </button>
+  </div>
+</div>
+
+      <div className="mb-3 coolinput">
+  <label htmlFor="newpassword" className="coolinputlabeltext">New Password:</label>
+  <div className="password-container position-relative">
+    <input
+      type={showNewPassword ? "text" : "password"}
+      id="newpassword"
+      name="newpassword"
+      className="coolinputinput"
+      placeholder="Enter New Password"
+      value={newpassword}
+      onChange={(e) => setNewPassword(e.target.value)}
+      required
+    />
+    <button
+      type="button"
+      className="password-toggle border-0 bg-light position-absolute end-0 top-45 translate-middle-y"
+      onClick={toggleNewPasswordVisibility}
+    >
+      <i className={`fa ${showNewPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true"></i>
+    </button>
+  </div>
+</div>
+
                       <button type="submit" className="Btn mt-2">Submit</button>
                     </form>
                   )}

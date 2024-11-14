@@ -9,7 +9,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false); // State for loading
     const [showPassword, setShowPassword] = useState(false); // State for password visibility
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const login = async (event) => {
         event.preventDefault();
@@ -87,7 +87,7 @@ export default function Login() {
                                     placeholder="Enter Your Email"
                                     required
                                 />
-                                <div className="passwordlogin d-flex border-0 shadow-sm bg-body rounded">
+                                <div className="passwordlogin d-flex border-0 shadow-sm bg-body rounded position-relative">
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         name="password"
@@ -99,12 +99,13 @@ export default function Login() {
                                     />
                                     <button
                                         type="button"
-                                        className=" passwordhidden border-0  bg-light"
+                                        className="passwordhidden border-0 bg-light position-absolute end-0 top-50 translate-middle-y"
                                         onClick={togglePasswordVisibility}
                                     >
                                         <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`} aria-hidden="true"></i>
                                     </button>
                                 </div>
+
                                 <div className="mb-3 mt-2">
                                     <button type="button" className="forgetpass text-start">
                                         <Link to="/email-verification" className="forgetpasslink">Forgot Your Password?</Link>
